@@ -26,6 +26,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\admin\" />
     <Folder Include="wwwroot\image\food\" />
+    <Folder Include="wwwroot\fe\" />
   </ItemGroup>
 
 </Project>

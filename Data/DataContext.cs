@@ -12,5 +12,7 @@ namespace FoodOrder.Data
         }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<FoodModel> Foods { get; set; }
+
+        public DbSet<CouponModel> Coupons { get; set; }
     }
 }

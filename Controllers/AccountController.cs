@@ -53,17 +53,16 @@ namespace FoodOrder.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel loginVM)
         {
-            if (ModelState.IsValid)
-            {
+          
                 Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.PasswordSignInAsync(loginVM.UserName, loginVM.Password, false, false);
                 if (result.Succeeded)
                 {
                     return Redirect(loginVM.ReturnUrl ?? "/");
                 }
                 ModelState.AddModelError("", "Mật khẩu hoặc password sai ");
+            return Redirect(loginVM.ReturnUrl ?? "/");
 
-            }
-            return View(loginVM);
+
         }
 
     }

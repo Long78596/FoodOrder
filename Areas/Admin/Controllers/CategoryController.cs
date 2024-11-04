@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace FoodOrder.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+
     public class CategoryController : Controller
     {
         private readonly DataContext _dataContext;

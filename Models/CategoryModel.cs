@@ -11,7 +11,7 @@ namespace FoodOrder.Models
         public string Title { get; set; }
         public string Slug { get; set; }
 
-        [Required(ErrorMessage = "Yêu cầu nhập nội dung  danh mục")]
+        [Required(ErrorMessage = "Yêu cầu nhập nội dung danh mục")]
         public string? Description { get; set; }
         public int Status{ get; set; }
     }

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CouponModel>
+<main>
+    <div class="container-fluid px-4">
+        <h3>Danh Sách Mã giảm giá</h3>
+
+
+        <div class="card mb-4">
+
+
+
+
+            <div class="card-body">
+                <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                    <div class="card">
+                        <h3><a asp-action="Create" asp-controller="Coupon" class="btn btn-primary">Add Coupon</a></h3>
+                    </div>
+
+                    <div class="datatable-container">
+                        <table id="myTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th data-sortable="true">
+                                        #
+                                    <th data-sortable="true">
+                                        Tên Mã giảm giá
+                                    </th>
+                                    <th data-sortable="true">Mô tả</th>
+                                    <th data-sortable="true">Số lượng</th>
+                                    <th data-sortable="true">Ngày còn hạn</th>
+                                    <th data-sortable="true">Ngày hết hạn</th>
+                                    <th data-sortable="true">Quản lí</th>
+                                    <th data-sortable="true">Manager</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr data-index="0">
+                                        <td class="text-center align-middle">@item.Id</td>
+                                        <td class="text-center align-middle">@item.Name</td>
+                                        <td class="text-center align-middle">@item.Description</td>
+                                        <td class="text-center align-middle">@item.Quantity</td>
+                                        <td class="text-center align-middle">@item.DateStart</td>
+                                        <td class="text-center align-middle">@item.DataExpired</td>
+
+                                        @if (item.Status == true)
+                                        {
+                                            <td>
+                                                <button class="btn btn-primary">Còn hạn</button>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center align-middile">
+                                                <button class="btn btn-warning">Hết hạn</button>
+                                            </td>
+                                        }
+
+                                        <td>
+                                            <a class="btn btn-warning" asp-action="Edit" asp-controller="Coupon" asp-route-Id="@item.Id">Edit</a>
+                                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Coupon" asp-route-Id="@item.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
