@@ -1,0 +1,71 @@
+﻿@model IEnumerable<CategoryModel>
+<main>
+    <div class="container-fluid px-4">
+        <h3 >Danh Sách danh mục</h3>
+       
+       
+        <div class="card mb-4">
+
+           
+           
+           
+            <div class="card-body">
+                <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                    <div class="card">
+                        <h3><a asp-action="Create" asp-controller="Category" class="btn btn-primary" >Add Category</a></h3>
+                    </div>
+                  
+                    <div class="datatable-container">
+                        <table id="myTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th data-sortable="true" >
+                                        #
+                                    <th data-sortable="true">
+                                         Tên Danh mục
+                                        </th>
+                                        <th data-sortable="true" >
+                                          Slug Danh mục
+                                            <th data-sortable="true" >Mô tả</th>
+                                            <th data-sortable="true" >Trạng Thái</th>
+                                            <th data-sortable="true">Manager</th>
+                                            
+                                        </tr>
+                                        </thead>
+                                            <tbody>
+                                @foreach(var item in Model)
+                                {
+                                    <tr data-index="0">
+                                        <td class="text-center align-middle">@item.Id</td>
+                                        <td class="text-center align-middle">@item.Title</td>
+                                        <td class="text-center align-middle">@item.Slug</td>
+                                        <td class="text-center align-middle">@item.Description</td>
+
+                                        @if (item.Status == 1  )
+                                        {
+                                            <td>
+                                                <button class="btn btn-primary">Hiển thị</button>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center align-middile">
+                                                <button class="btn btn-warning"> Không Hiển thị</button>
+                                            </td>
+                                        }
+                                       
+                                        <td>
+                                            <a class="btn btn-warning" asp-action="Edit" asp-controller="Category" asp-route-Id="@item.Id">Edit</a>
+                                            <a class="btn btn-danger" asp-action="Delete" asp-controller="Category" asp-route-Id="@item.Id">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                                                    </table>
+                                                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

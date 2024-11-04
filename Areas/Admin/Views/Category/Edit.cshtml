@@ -1,0 +1,57 @@
+﻿@model CategoryModel
+@{
+    ViewData["title"] = "Cập nhật Danh mục";
+}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 col-12 mx-auto">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3>Cập nhật Danh mục</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" asp-controller="Category" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label class="form-label">Tên Danh mục</label>
+                            <input asp-for="Title" type="text" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control"></textarea>
+                            <span asp-validation-for="Description" class="text-danger" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Trạng thái</label>
+                            <select asp-for="Status" class="form-control">
+                                <option>--Chọn hiển thị</option>
+                                <option value="1">Hiển thị</option>
+                                <option value="0">Không hiển thị</option>
+
+                            </select>
+                            <span asp-validation-for="Status" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+
+                        </div>
+                    </form>
+                    <a asp-action="index" asp-controller="Category">Danh sách danh mục</a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

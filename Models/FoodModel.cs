@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using FoodOrder.Repository.Validation;
 
 namespace FoodOrder.Models
 {
@@ -18,13 +19,13 @@ namespace FoodOrder.Models
         public string Description { get; set; }
 
         public bool Status { get; set; }
-        public string? servingsize { get; set; }
+        public int? Quantity { get; set; }
 
         public string Address { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập giá món ăn")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Giá món ăn phải lớn hơn 0")]
-        public double DonGia { get; set; }
+        public double Price { get; set; }
 
         
 
@@ -39,7 +40,7 @@ namespace FoodOrder.Models
         public CategoryModel Category { get; set; }
 
         [NotMapped]
-        [FileExtensions]
+        [FileExtension]
         public IFormFile? ImageUpload { get; set; }
     }
 }
