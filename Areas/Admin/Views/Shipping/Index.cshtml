@@ -1,0 +1,194 @@
+﻿@model ShippingModel
+
+@{
+    ViewData["title"] = " Create title";
+}
+<style type="text/css">
+    .css_select_div {
+        text-align: center;
+    }
+
+    .css_select {
+        display: inline-table;
+        width: 25%;
+        padding: 5px;
+        margin: 5px 2%;
+        border: solid 1px #686868;
+        border-radius: 5px;
+    }
+</style>
+<h3>Create brand</h3>
+<div class="row">
+    <div class="col-9">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label>Chọn Tỉnh thành phố</label>
+            <select class="form-control css_select" name="tinh" id="tinh" title="chọn Tỉnh thành">
+                <option value="0">Tỉnh/Thành phố</option>
+
+
+            </select>
+
+
+            </span>
+
+        </div>
+        <div class="form-group">
+            <label>Chọn Tỉnh thành phố</label>
+            <select class="form-control css_select" name="quan" id="quan" title="chọn quận huyện">
+                <option value="0">Quận huyện</option>
+
+
+            </select>
+
+
+            </span>
+
+        </div>
+        <div class="form-group">
+            <label>Chọn Tỉnh thành phố</label>
+            <select class="form-control css_select" name="phuong" id="phuong" title="chọn phường xã">
+                <option value="0">Phường xã</option>
+
+
+            </select>
+
+
+            </span>
+
+        </div>
+        <div class="form-group">
+            <label>Gía</label>
+            <input type="text" asp-for="Price" class="form-control" id="price-shipping" />
+        </div>
+
+
+
+        <div class="form-group">
+            <button type="button" class="btn btn-primary btn-add-shipping" type="submit">
+                Create
+            </button>
+        </div>
+        <a asp-action="Index" asp-controller="Shipping">Back to list shopping</a>
+    </div>
+</div>
+
+<h3>Shipping List</h3>
+
+<table class="table table-striped" id="myTable">
+    <thead>
+        <tr>
+            <th>
+                City
+            </th>
+            <th>District</th>
+            <th>Ward</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shipping in ViewBag.Shippings)
+        {
+            <tr>
+                <td>@shipping.City</td>
+                <td>@shipping.Dictric</td>
+                <td>@shipping.Ward</td>
+                <td>@shipping.Price.ToString("#,##0 VND")</td>
+                <td>
+                    <a href="@Url.Action("Delete", "Shipping", new { id = shipping.Id })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+        <script>
+            $(".btn-add-shipping").on("click", function () {
+                var tinh = $("#tinh").find("option:selected").text();
+                var quan = $("#quan").find("option:selected").text();
+                var phuong = $("#phuong").find("option:selected").text();
+
+                var price = $("#price-shipping").val();
+                if (tinh == "" || quan == "" || phuong == "" || price == "") {
+                    alert("Làm ơn ko bỏ trống");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("AddShipping", "Shipping")",
+                        data: { tinh: tinh, quan: quan, phuong: phuong, price: price },
+                        success: function (result) {
+                            if (result.success) {
+                                alert("Thêm vận chuyển thành công");
+                                Location.load();
+
+                            } else if (result.duplicate) {
+                                alert("Có lỗi");
+
+                            }
+
+
+                        }
+
+
+
+                    });
+
+                }
+            });
+
+
+        </script>
+
+        <script>
+            $(document).ready(function () {
+                //Lấy tỉnh thành
+                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
+                    if (data_tinh.error == 0) {
+                        $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                            $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                        });
+                        $("#tinh").change(function (e) {
+                            var idtinh = $(this).val();
+                            //Lấy quận huyện
+                            $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                                if (data_quan.error == 0) {
+                                    $("#quan").html('<option value="0">Quận Huyện</option>');
+                                    $("#phuong").html('<option value="0">Phường Xã</option>');
+                                    $.each(data_quan.data, function (key_quan, val_quan) {
+                                        $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                                    });
+                                    //Lấy phường xã
+                                    $("#quan").change(function (e) {
+                                        var idquan = $(this).val();
+                                        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                                            if (data_phuong.error == 0) {
+                                                $("#phuong").html('<option value="0">Phường Xã</option>');
+                                                $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                                    $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                                                });
+                                            }
+                                        });
+                                    });
+
+                                }
+                            });
+                        });
+
+                    }
+                });
+            });
+        </script>
+    }
+}

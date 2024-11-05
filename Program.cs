@@ -1,6 +1,8 @@
-using AspNetCoreHero.ToastNotification;
+﻿using AspNetCoreHero.ToastNotification;
 using FoodOrder.Data;
 using FoodOrder.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +13,8 @@ namespace FoodOrder
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+           
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -51,8 +55,29 @@ namespace FoodOrder
                 config.IsDismissable = true;
                 config.Position = NotyfPosition.TopRight;
             });
+            // configuration Login Google account
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            }).AddCookie().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+            {
+                options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+
+            });
+
+            //builder.Services.AddAuthentication().AddFacebook(opt =>
+            //{
+            //    opt.ClientId = "";
+            //    opt.ClientSecret = "";
+            //});
 
             var app = builder.Build();
+            app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -66,7 +91,7 @@ namespace FoodOrder
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllerRoute(
     name: "Areas",

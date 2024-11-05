@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
@@ -26,6 +28,21 @@
   <ItemGroup>
     <Folder Include="wwwroot\admin\" />
     <Folder Include="wwwroot\image\food\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\fe\css\.DS_Store" />
+    <None Include="wwwroot\fe\css\bootstrap\.DS_Store" />
+    <None Include="wwwroot\fe\css\css\.DS_Store" />
+    <None Include="wwwroot\fe\css\css\mixins\.DS_Store" />
+    <None Include="wwwroot\fe\fonts\.DS_Store" />
+    <None Include="wwwroot\fe\fonts\flaticon\.DS_Store" />
+    <None Include="wwwroot\fe\fonts\flaticon\font\.DS_Store" />
+    <None Include="wwwroot\fe\fonts\ionicons\fonts\.DS_Store" />
+    <None Include="wwwroot\fe\images\.DS_Store" />
+    <None Include="wwwroot\fe\js\.DS_Store" />
+    <None Include="wwwroot\fe\scss\.DS_Store" />
+    <None Include="wwwroot\fe\scss\bootstrap\.DS_Store" />
   </ItemGroup>
 
 </Project>

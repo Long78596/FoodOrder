@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FoodOrder.Data;
 using FoodOrder.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 namespace FoodOrder.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
+    [Authorize(Roles = "Admin,Sales")]
     public class FoodController : Controller
     {
         private readonly DataContext _dataContext;
