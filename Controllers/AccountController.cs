@@ -106,7 +106,7 @@ namespace FoodOrder.Controllers
         }
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
             if (!result.Succeeded)
             {
                 return RedirectToAction("Login");
@@ -133,7 +133,7 @@ namespace FoodOrder.Controllers
                 var newUser = new AppUserModel { UserName = UserName, Email = email };
                 newUser.PasswordHash = hashedPassword;
                 var createUserResult = await _userManager.CreateAsync(newUser);
-                if (createUserResult.Succeeded)
+                if (!createUserResult.Succeeded)
                 {
                     _notyfService.Error("Đăng nhập thất bại");
                     return RedirectToAction("Login", "Account");
@@ -141,13 +141,15 @@ namespace FoodOrder.Controllers
                 else
                 {
                     await _signInManager.SignInAsync(newUser, isPersistent: false);
-                    _notyfService.Success("Đăng nhập thành công");
+                    _notyfService.Success("Đăng ký thành công");
                     return RedirectToAction("Index", "Home");
                 }
             }
             else
             {
                 await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                _notyfService.Success("Đăng nhập thành công");
+                return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Login", "Account");
         }
