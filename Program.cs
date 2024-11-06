@@ -1,9 +1,11 @@
 ﻿using AspNetCoreHero.ToastNotification;
+using FoodOrder.Areas.Admin.Repository;
 using FoodOrder.Data;
 using FoodOrder.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodOrder
@@ -21,8 +23,9 @@ namespace FoodOrder
             // Configure DbContext
             builder.Services.AddDbContext<DataContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectDB")));
-            
-            
+
+            builder.Services.AddTransient<IEmailSendercs, EmailSender>();
+
             builder.Services.AddIdentity<AppUserModel, IdentityRole>()
            .AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
 
@@ -70,11 +73,7 @@ namespace FoodOrder
 
             });
 
-            //builder.Services.AddAuthentication().AddFacebook(opt =>
-            //{
-            //    opt.ClientId = "";
-            //    opt.ClientSecret = "";
-            //});
+           
 
             var app = builder.Build();
             app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");
