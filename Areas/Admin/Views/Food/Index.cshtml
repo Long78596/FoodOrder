@@ -22,34 +22,27 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table mb-0">
+            <table id="myTable" class="table mb-0">
                 <thead class="table-light">
                     <tr>
-                    <tr>
-                        <th class="text-center" data-sortable="true">
-                            #
-                        <th class="text-center" data-sortable="true">
-                            Tên món ăn
-                        </th>
-                        <th class="text-center" data-sortable="true">
-                            Hình ảnh
-
+                        <th class="text-center" data-sortable="true">#</th>
+                        <th class="text-center" data-sortable="true">Tên món ăn</th>
+                        <th class="text-center" data-sortable="true">Hình ảnh</th>
                         <th class="text-center" data-sortable="true">Tên Danh mục</th>
                         <th class="text-center" data-sortable="true">Trạng Thái</th>
                         <th class="text-center" data-sortable="true">Manager</th>
-
-                    </tr>
                     </tr>
                 </thead>
                 <tbody>
-                          @foreach (var item in Model)
-                                {
-                                    <tr data-index="0">
-                                        <td class="text-center align-middle">@item.Id</td>
-                                        <td class="text-center align-middle">@item.Title</td>
-                                        <td class="text-center align-middle"><img src="~/image/food/@item.Image" style="height:100px;" /></td>
-                                        <td class="text-center align-middle">@item.Category.Title</td>
-
+                    @foreach (var item in Model)
+                    {
+                        <tr data-index="0">
+                            <td class="text-center align-middle">@item.Id</td>
+                            <td class="text-center align-middle">@item.Title</td>
+                            <td class="text-center align-middle">
+                                <img src="~/image/food/@item.Image" style="height:100px;" />
+                            </td>
+                            <td class="text-center align-middle">@item.Category.Title</td>
 
                             @if (item.Status == true)
                             {
@@ -62,23 +55,21 @@
                             else
                             {
                                 <td>
-                                    <div class="badge rounded-pill text-success bg-light-warning p-2 text-uppercase px-3">
+                                    <div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">
                                         <i class="bx bxs-circle me-1"></i>Tạm tắt
                                     </div>
                                 </td>
                             }
-                                        <td class="text-center align-middle">
-                                <a asp-action="Edit" asp-controller="Food" asp-route-Id="@item.Id" class=""><i class="bx bxs-edit"></i></a>
-                                <a asp-action="Delete" asp-controller="Food" asp-route-Id="@item.Id" class="ms-3"><i class="bx bxs-trash"></i></a>
-                                            
-                                        </td>
-                                    </tr>
-                                }
-                   
-                    
 
+                            <td class="text-center align-middle">
+                                <a asp-action="Edit" asp-controller="Food" asp-route-Id="@item.Id"><i class="bx bxs-edit"></i></a>
+                                <a asp-action="Delete" asp-controller="Food" asp-route-Id="@item.Id" class="ms-3"><i class="bx bxs-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
