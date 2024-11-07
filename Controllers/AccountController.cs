@@ -112,7 +112,56 @@ namespace FoodOrder.Controllers
 
                 });
         }
-    
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+
+            });
+            //_notyfService.Success("Đăng nhập thành công");
+            //return RedirectToAction("Index", "Home");
+            //return Json(claims);
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            string UserName = email.Split("")[0];
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                var passwordHasher = new PasswordHasher<AppUserModel>();
+                var hashedPassword = passwordHasher.HashPassword(null, "123456qa");
+                var newUser = new AppUserModel { UserName = UserName, Email = email };
+                newUser.PasswordHash = hashedPassword;
+                var createUserResult = await _userManager.CreateAsync(newUser);
+                if (!createUserResult.Succeeded)
+                {
+                    _notyfService.Error("Đăng nhập thất bại");
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+                    _notyfService.Success("Đăng ký thành công");
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                _notyfService.Success("Đăng nhập thành công");
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Login", "Account");
+        }
+
         public async Task<IActionResult> NewPass(AppUserModel user, string token)
         {
             var checkuser = await _userManager.Users.Where(u => u.Email == user.Email).Where(u => u.Token == user.Token).FirstOrDefaultAsync();
