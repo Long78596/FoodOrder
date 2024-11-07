@@ -51,6 +51,11 @@ namespace FoodOrder
                 //options.User.RequireUniqueEmail = false;
             });
             // Configure ToastNotification
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.IsEssential = true;
+            });
 
             builder.Services.AddNotyf(config =>
             {
@@ -88,6 +93,8 @@ namespace FoodOrder
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
             app.UseAuthentication();

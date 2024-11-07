@@ -28,10 +28,17 @@ namespace FoodOrder.Controllers
             var foods = _dataContext.Foods.Include(d => d.Category).Skip(1).Take(8).ToList();
             return View(foods);
         }
+
         public IActionResult Shop()
         {
             var foods = _dataContext.Foods.Include(d => d.Category).ToList();
             return View(foods);
+        }
+        public async Task<IActionResult> Search(string searchtern)
+        {
+            var products = await _dataContext.Foods.Where(p => p.Title.Contains(searchtern) || p.Description.Contains(searchtern)).ToListAsync();
+            ViewBag.Keyword = searchtern;
+            return View(products);
         }
         public async Task<IActionResult> Detail(int Id)
         {

@@ -7,6 +7,7 @@
 @Html.Partial("_CategoriesPartial")
 
 
+
 <section class="featured spad">
     <div class="container">
         <div class="row">
@@ -34,7 +35,7 @@
                             <ul class="featured__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li><a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id"><i class="fa fa-shopping-cart"></i></a></li>
                             </ul>
                         </div>
                         <div class="featured__item__text">
