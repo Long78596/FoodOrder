@@ -64,7 +64,12 @@ namespace FoodOrder
                 config.Position = NotyfPosition.TopRight;
             });
             // configuration Login Google account
-
+            //builder.Services.AddAuthentication().AddFacebook(
+            //    opt =>
+            //    {
+            //        opt.ClientId = "",
+            //        opt.ClientSecret= ""
+            //    });
             builder.Services.AddAuthentication(options =>
             {
                 //options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -102,6 +107,10 @@ namespace FoodOrder
             app.MapControllerRoute(
     name: "Areas",
     pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+         name: "category",
+         pattern: "/category/{Slug}",
+          defaults: new { controller = "Category", action = "Index" });
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

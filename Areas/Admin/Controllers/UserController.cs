@@ -1,5 +1,7 @@
-﻿using FoodOrder.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using FoodOrder.Data;
 using FoodOrder.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +18,15 @@ namespace FoodOrder.Areas.Admin.Controllers
         private readonly UserManager<AppUserModel> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly DataContext _context;
-        public UserController(DataContext context, UserManager<AppUserModel> userManager, RoleManager<IdentityRole> roleManager)
+        private readonly INotyfService _notyfService;
+        private readonly SignInManager<AppUserModel> _signInManager;
+        public UserController(DataContext context, UserManager<AppUserModel> userManager, RoleManager<IdentityRole> roleManager,INotyfService notyfService,SignInManager<AppUserModel> signInManager)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _notyfService = notyfService;
+            _signInManager = signInManager;
         }
         [HttpGet]
         [Route("Index")]
@@ -194,6 +200,13 @@ namespace FoodOrder.Areas.Admin.Controllers
             var errors = ModelState.Values.SelectMany(v => v.Errors.Select(x => x.ErrorMessage)).ToList();
             string errorMessage = string.Join("\n", errors);
             return View(existing);
+        }
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            await _signInManager.SignOutAsync();
+            _notyfService.Error("Đăng xuất thành công");
+            return RedirectToAction("Login", "Account");
         }
 
     }

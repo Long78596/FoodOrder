@@ -42,15 +42,40 @@ namespace FoodOrder.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (user.Password.Length < 6 || !user.Password.Any(char.IsLetter) || !user.Password.Any(char.IsDigit))
+                {
+                    _notyfService.Error( "Mật khẩu phải có ít nhất 6 ký tự và bao gồm cả chữ và số.");
+                    return PartialView(user);
+                }
+
+
+
+                var existingEmail = await _userManager.FindByEmailAsync(user.Email);
+                if (existingEmail != null)
+                {
+                    _notyfService.Error( "Email đã tồn tại trong hệ thống.");
+                    return PartialView(user);
+                }
+                var existingName = await _userManager.FindByNameAsync(user.UserName);
+                if (existingName != null)
+                {
+                    _notyfService.Error("tên tài khoản  đã tồn tại trong hệ thống.");
+                    return PartialView(user);
+                }
+
+
+
+
                 AppUserModel newUser = new AppUserModel { UserName = user.UserName, Email = user.Email };
                 IdentityResult result = await _userManager.CreateAsync(newUser, user.Password);
+
                 if (result.Succeeded)
                 {
                     _notyfService.Success("Đăng ký thành công");
-                    
-
                     return Redirect("/account/login");
                 }
+
+              
                 foreach (IdentityError error in result.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
@@ -58,6 +83,7 @@ namespace FoodOrder.Controllers
             }
             return PartialView(user);
         }
+
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
@@ -97,11 +123,12 @@ namespace FoodOrder.Controllers
             return PartialView(loginVM);
         }
 
-        public async Task<IActionResult> Logout(string returnUrl= "/")
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
             await _signInManager.SignOutAsync();
-            return RedirectToAction(returnUrl);
+            _notyfService.Error("Đăng xuất thành công");
+            return RedirectToAction("Login", "Account");
         }
         public async Task LoginByGoogle()
         {

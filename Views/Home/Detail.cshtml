@@ -79,14 +79,19 @@
                     <p>
                         @Model.Foods.Description
                     </p>
+                    <form asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@Model.Foods.Id">
                     <div class="product__details__quantity">
                         <div class="quantity">
                             <div class="pro-qty">
-                                <input type="text" value="1">
+                                    <input type="text" value="1" name="quantity">
                             </div>
                         </div>
                     </div>
-                    <a href="#" class="primary-btn">ADD TO CARD</a>
+                        <button class="primary-btn " style="border: none; outline: none; box-shadow: none;">
+                            thêm
+                        </button>
+
+                    </form>
                     <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                     <ul>
                         <li><b>Trạng thái</b>: <span>@(Model.Foods.Status ? "Còn món" : "Hết")</span></li>

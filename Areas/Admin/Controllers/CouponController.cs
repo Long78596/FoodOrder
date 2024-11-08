@@ -74,6 +74,7 @@ namespace FoodOrder.Areas.Admin.Controllers
             }
             exists_coupon.Name = couponmodel.Name;
             exists_coupon.Description = couponmodel.Description;
+            exists_coupon.Quantity = couponmodel.Quantity;
             exists_coupon.Status = couponmodel.Status;
             _dataContext.Update(exists_coupon);
             await _dataContext.SaveChangesAsync();

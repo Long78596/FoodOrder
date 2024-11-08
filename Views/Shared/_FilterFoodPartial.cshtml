@@ -1,0 +1,40 @@
+﻿@{
+    var currentUrl = Url.ActionContext.HttpContext.Request.Path;
+}
+<div class="col-lg-4 col-md-5">
+                            <div class="filter__sort">
+        <h5><span>Sắp xếp theo</span></h5>
+        <select class="form-control" id="sort_by" onchange="location = this.value;">
+            <option value="@currentUrl">----------</option>
+            <option value="@currentUrl?sort_by=price_increase">Giá tăng dần</option>
+            <option value="@currentUrl?sort_by=price_decrease">Giá giảm dần</option>
+            <option value="@currentUrl?sort_by=price_newest">Mới nhất</option>
+            <option value="@currentUrl?sort_by=price_oldest">Cũ nhất</option>
+        </select>
+                            </div>
+                        </div>
+<@* div class="container">
+    <div class="row">
+        <!-- Sắp xếp theo -->
+        <div class="col-md-2">
+            <h5>Sắp xếp theo</h5>
+            <select class="form-control" id="sort_by" onchange="location = this.value;">
+                <option value="@currentUrl">----------</option>
+                <option value="@currentUrl?sort_by=price_increase">Giá tăng dần</option>
+                <option value="@currentUrl?sort_by=price_decrease">Giá giảm dần</option>
+                <option value="@currentUrl?sort_by=price_newest">Mới nhất</option>
+                <option value="@currentUrl?sort_by=price_oldest">Cũ nhất</option>
+            </select>
+        </div>
+
+        <!-- lọc theo giá -->
+         <div class="col-md-5">
+            <h5>lọc theo giá</h5>
+            <form asp-action="index" asp-controller="category" method="get">
+                <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+                <div id="slider-range"></div>
+                <button type="submit" name="locgia" data-current_url="@currenturl" class="btn btn-danger mt-2">lọc giá</button>
+            </form>
+        </div> 
+    </div>
+</div> *@

@@ -28,6 +28,7 @@
                                     <th data-sortable="true">Số lượng</th>
                                     <th data-sortable="true">Ngày còn hạn</th>
                                     <th data-sortable="true">Ngày hết hạn</th>
+                                    <th data-sortable="true">Tình Trạng</th>
                                     <th data-sortable="true">Trạng thái</th>
                                     <th data-sortable="true">Manager</th>
                                 </tr>
@@ -40,8 +41,8 @@
                                         <td class="text-center align-middle">@item.Name</td>
                                         <td class="text-center align-middle">@item.Description</td>
                                         <td class="text-center align-middle">@item.Quantity</td>
-                                        <td class="text-center align-middle">@item.DateStart</td>
-                                        <td class="text-center align-middle">@item.DataExpired</td>
+                                        <td class="text-center align-middle">@item.DateStart.ToString("dd-MM--yyyy")</td>
+                                        <td class="text-center align-middle">@item.DataExpired.ToString("dd-MM--yyyy")</td>
 
                                         @if (item.Status == true)
                                         {
@@ -55,6 +56,24 @@
                                                 <button class="btn btn-warning">Hết hạn</button>
                                             </td>
                                         }
+                                        <td>
+                                            @if (item.DataExpired <DateTime.Now)
+                                            {
+                                                <span class="text text-danger">Hết hạn</span>
+                                            }
+                                            else
+                                            {
+                                                TimeSpan remainingTime = item.DataExpired - DateTime.Now;
+                                                int dayRemaining = remainingTime.Days;
+                                                @if(dayRemaining==0){
+                                                    <span class="text text-danger">Ngày hôm nay</span>
+                                                }
+                                                else
+                                                {
+                                                   <span class="text text-success">@dayRemaining ngày còn</span> 
+                                                }
+                                            }
+                                        </td>
 
                                         <td>
                                             <a class="btn btn-warning" asp-action="Edit" asp-controller="Coupon" asp-route-Id="@item.Id">Edit</a>
