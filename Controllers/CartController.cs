@@ -23,10 +23,12 @@ namespace FoodOrder.Controllers
         public IActionResult Index()
         {
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+            var coupon_code = Request.Cookies["CouponTitle"];
             CartItemViewModel cartVM = new()
             {
                 CartItems = cart,
-                GrandTotal = cart.Sum(x => x.Quantity * x.Price)
+                GrandTotal = cart.Sum(x => x.Quantity * x.Price),
+                CouponCode=coupon_code,
             };
             return View(cartVM);
         }
@@ -169,8 +171,11 @@ namespace FoodOrder.Controllers
         {
             var validCoupon = await _dataContext.Coupons
                 .FirstOrDefaultAsync(x => x.Name == coupon_value && x.Quantity >= 1);
-
-            string couponTitle = validCoupon.Name + " | " + validCoupon?.Description;
+            if (validCoupon == null)
+            {
+                return Ok(new { success = false, message = "Mã giảm giá đã hết hạn hoặc đã hết số lượng" });
+            }
+            string couponTitle = validCoupon.Name + " - " + validCoupon?.Description;
 
             if (couponTitle != null)
             {

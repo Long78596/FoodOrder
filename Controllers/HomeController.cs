@@ -156,8 +156,27 @@ namespace FoodOrder.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> CommentFood(RatingModel rating)
         {
+            // Danh sách các từ nhạy cảm
+            var list = new List<string> { "bậy bạ", "từxấu2", "khôngphùhợp", "con cu", "con cac" }; 
+
+            var wordCount = rating.Comment?.Split(' ').Length ?? 0;
+            if (wordCount > 100)
+            {
+
+                _notyfService.Error("Bình luận chứa quá 100 từ! ");
+                return Redirect(Request.Headers["Referer"]);
+            }
+
+            // Kiểm tra từ nhạy cảm
+            if (list.Any(word => rating.Comment.Contains(word, StringComparison.OrdinalIgnoreCase)))
+            {
+                _notyfService.Error("Bình luận chứa từ ngữ ko phù hợp! ");
+                return Redirect(Request.Headers["Referer"]);
+            }
+
             if (ModelState.IsValid)
             {
                 var ratingEntity = new RatingModel
@@ -171,15 +190,13 @@ namespace FoodOrder.Controllers
                 await _dataContext.SaveChangesAsync();
                 _notyfService.Success("Thêm đánh giá thành công");
                 return Redirect(Request.Headers["Referer"]);
-
             }
             else
             {
                 return RedirectToAction("Detail", new { id = rating.FoodId });
             }
-
-            return RedirectToAction("Detail");
         }
+
 
         public IActionResult Privacy()
         {

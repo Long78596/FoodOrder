@@ -2,15 +2,51 @@
 @model CartItemViewModel
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+<section class="hero hero-normal">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>Danh mục</span>
+                    </div>
+                    <ul>
+                        <vc:categories></vc:categories>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        @Html.Partial("_Search")
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+65 11.188.888</h5>
+                            <span>support 24/7 time</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="/Frontend/img/breadcrumb.jpg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
-                    <h2>Shopping Cart</h2>
+                    @* <h2>@Model.Foods.Title</h2> *@
                     <div class="breadcrumb__option">
-                        <a href="./index.html">Home</a>
-                        <span>Shopping Cart</span>
+                        <a asp-action="Index" asp-controller="Home">Home</a>
+                        @* <a asp-action="Index" asp-controller="Category" asp-route-Slug="@Model.Foods.Slug">@Model.Foods.Category.Title</a> *@
+                        @* <span>@Model.Foods.Title</span> *@
                     </div>
                 </div>
             </div>
@@ -93,13 +129,13 @@
             <div class="col-lg-6">
                 <div class="shoping__continue">
                     <div class="shoping__discount">
-                        <h5>Discount Codes</h5>
-                        <form asp-action="">
-                            Mã giảm giá
-                            <input type="text" class="form-control coupon-value" />
-                            <input type="text" class="btn btn-sm btn-primary btn-apply-coupon" placeholder="Vui lòng nhập mã giảm giá">
-                           @*  <button type="submit" value="Apply" class="site-btn">Phiếu giảm giá</button> *@
-                        </form>
+                       
+                            <h5>Phiếu giảm giá</h5>
+                            <form >
+                                <input type="text" class=" coupon-value" placeholder="Enter your coupon code">
+                                <button type="submit" class="site-btn btn-apply-coupon">Ap dụng</button>
+                                <p><span class="text text-success" value="apply">@Model.CouponCode</span></p>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -110,7 +146,7 @@
                         <li>Subtotal <span>GrandTotal: @Model.GrandTotal.ToString("##,###")</span></li>
                         <li>Total <span>@Model.CartItems.Sum(x => x.Quantity * x.Price).ToString("##,###")</span></li>
                     </ul>
-                    <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                    <a asp-action="Index" asp-controller="Checkout" class="primary-btn">PROCEED TO CHECKOUT</a>
                 </div>
             </div>
         </div>
@@ -118,23 +154,27 @@
     </div>
 </section>
 @section Scripts {
-        $(".btn-apply-coupon").click(function () {
+    <script>
+        $(".btn-apply-coupon").click(function (event) {
+            event.preventDefault(); // Prevent form submission
+
             var coupon_value = $(".coupon-value").val();
             $.ajax({
                 type: "POST",
                 url: "@Url.Action("GetCoupon", "Cart")",
-            data: { coupon_value: coupon_value },
-            success: function (result) {
-                if (result.success) {
-                    alert("Áp phiếu giảm giá thành công");
-                    location.reload();
-                } else {
-                    alert(result.message);
+                data: { coupon_value: coupon_value },
+                success: function (result) {
+                    if (result.success) {
+                        alert("Áp phiếu giảm giá thành công");
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi khi áp dụng phiếu giảm giá.");
                 }
-            },
-            error: function () {
-                alert("Đã xảy ra lỗi khi áp dụng phiếu giảm giá.");
-            }
+            });
         });
-    });
+    </script>
 }

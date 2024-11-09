@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Ogani Template">
+    <meta name="keywords" content="Ogani, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ogani | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/Frontend/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="~/Frontend/css/style.css" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <label>Chọn Tỉnh thành phố</label>
+        <select id="tinh">
+            <option value="0">Tỉnh/Thành phố</option>
+        </select>
+    </div>
+    <div>
+        <label>Chọn Quận huyện</label>
+        <select id="quan">
+            <option value="0">Quận huyện</option>
+        </select>
+    </div>
+    <div>
+        <label>Chọn Phường xã</label>
+        <select id="phuong">
+            <option value="0">Phường xã</option>
+        </select>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Load Tỉnh/Thành phố
+            $.ajax({
+                url: 'https://esgoo.net/api-tinhthanh/1/0.htm',
+                method: 'GET',
+                dataType: 'json',
+                success: function (data_tinh) {
+                    if (data_tinh.error === 0) {
+                        $.each(data_tinh.data, function (key_tinh, val_tinh) {
+                            $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+                        });
+                    } else {
+                        console.error("API returned an error:", data_tinh);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error loading provinces:", textStatus, errorThrown);
+                    alert("Cannot load provinces. Please check the API or network connection.");
+                }
+            });
+
+            // Change event for Tỉnh/Thành phố
+            $("#tinh").change(function () {
+                var idtinh = $(this).val();
+                // Load Quận/Huyện
+                $.ajax({
+                    url: 'https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data_quan) {
+                        if (data_quan.error === 0) {
+                            $("#quan").html('<option value="0">Quận huyện</option>');
+                            $("#phuong").html('<option value="0">Phường xã</option>');
+                            $.each(data_quan.data, function (key_quan, val_quan) {
+                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                            });
+                        } else {
+                            console.error("API returned an error:", data_quan);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error loading districts:", textStatus, errorThrown);
+                        alert("Cannot load districts. Please check the API or network connection.");
+                    }
+                });
+            });
+
+            // Change event for Quận/Huyện
+            $("#quan").change(function () {
+                var idquan = $(this).val();
+                // Load Phường/Xã
+                $.ajax({
+                    url: 'https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data_phuong) {
+                        if (data_phuong.error === 0) {
+                            $("#phuong").html('<option value="0">Phường xã</option>');
+                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                            });
+                        } else {
+                            console.error("API returned an error:", data_phuong);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error("Error loading wards:", textStatus, errorThrown);
+                        alert("Cannot load wards. Please check the API or network connection.");
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="~/Frontend/jquery-3.3.1.min.~/js"></script>
+    <script src="~/Frontend/js/bootstrap.min.~/js"></script>
+    <script src="~/Frontend/jquery.nice-select.min.~/js"></script>
+    <script src="~/Frontend/jquery-ui.min.~/js"></script>
+    <script src="~/Frontend/jquery.slicknav.~/js"></script>
+    <script src="~/Frontend/mixitup.min.~/js"></script>
+    <script src="~/Frontend/owl.carousel.min.~/js"></script>
+    <script src="~/Frontend/main.js"></script>
+</body>
+
+</html>
