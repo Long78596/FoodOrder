@@ -1,0 +1,30 @@
+﻿@model IEnumerable<FoodOrder.Models.RatingModel>
+
+<h2>Quản lý bình luận</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Bình luận</th>
+            <th>Đánh giá</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var comment in Model)
+        {
+            <tr>
+                <td>@comment.Id</td>
+                <td>@comment.Name</td>
+                <td>@comment.Comment</td>
+                <td>@comment.Star</td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@comment.Id" class="btn btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
