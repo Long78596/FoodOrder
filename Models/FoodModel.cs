@@ -19,8 +19,8 @@ namespace FoodOrder.Models
         public string Description { get; set; }
 
         public bool Status { get; set; }
-        public int? Quantity { get; set; }
-
+        public int Quantity { get; set; }
+        public int? Sold { get; set; }
         public string Address { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập giá món ăn")]

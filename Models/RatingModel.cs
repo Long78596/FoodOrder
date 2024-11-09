@@ -10,12 +10,13 @@ namespace FoodOrder.Models
 
         public int FoodId { get; set; }
         [Required(ErrorMessage = "yêu cầu nhập nội dung sản phẩm")]
+        
         public string? Comment { get; set; }
         [Required(ErrorMessage = "yêu cầu nhập tên ")]
         public string? Name { get; set; }
         public string? Star { get; set; }
 
-        //[ForeignKey("ProductId")]
-        //public FoodModel Food{ get; set; }
+        [ForeignKey("FoodId")]
+        public FoodModel Food{ get; set; }
     }
 }

@@ -34,7 +34,7 @@ namespace FoodOrder.Areas.Admin.Controllers
         }
         [HttpPost]
         [Route("StoreShipping")]
-        public async Task<IActionResult> AddShipping(ShippingModel shippingModel, string phuong, string quan, string tinh, decimal price)
+        public async Task<IActionResult> AddShipping(ShippingModel shippingModel, string phuong, string quan, string tinh, double price)
         {
             shippingModel.City = tinh;
             shippingModel.Dictric = quan;

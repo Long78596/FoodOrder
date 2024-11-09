@@ -10,7 +10,7 @@
         </div>
         <div class="checkout__form">
             <h4>Billing Details</h4>
-            <form asp-action="CONFIRM" asp-controller="Checkout">
+            <form asp-action="ConfirmPayment" asp-controller="Checkout">
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
                         <div class="row">
@@ -23,35 +23,10 @@
                             </div>
                            
                         </div>
-                        <div class="checkout__input">
-                            <p>Thành phố/Tỉnh thành<span>*</span></p>
-                            <label>Chọn Tỉnh thành phố</label>
-                            <select class="form-control css_select" name="tinh" id="tinh" title="chọn Tỉnh thành">
-                                <option value="0">Tỉnh/Thành phố</option>
-
-
-                            </select>
-                        </div>
-                      
-                        <div class="checkout__input">
-                            <p>Quận/ Huyện<span>*</span></p>
-                            <select class="form-control css_select" name="quan" id="quan" title="chọn quận huyện">
-                                <option value="0">Quận huyện</option>
-
-
-                            </select>
-                        </div>
-                        <div class="checkout__input">
-                            <p>Phường /xã<span>*</span></p>
-                            <select class="form-control css_select" name="phuong" id="phuong" title="chọn phường xã">
-                                <option value="0">Phường xã</option>
-
-
-                            </select>
-                        </div>
+                       
                         <div class="checkout__input">
                             <p>Địa chỉ cụ thể<span>*</span></p>
-                            <input type="text">
+                            <input type="text" asp-for="Address">
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
@@ -64,25 +39,16 @@
                                 <div class="checkout__input">
                                     <p>Email<span>*</span></p>
                                     <input type="text" asp-for="Email">
-                                    <span asp-validation-for="UserName"></span>
+                                    <span asp-validation-for="Email"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="checkout__input__checkbox">
-                            <label for="acc">
-                                Create an account?
-                                <input type="checkbox" id="acc">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
+                       
                         <p>
                             Create an account by entering the information below. If you are a returning customer
                             please login at the top of the page
                         </p>
-                        <div class="checkout__input">
-                            <p>Account Password<span>*</span></p>
-                            <input type="text">
-                        </div>
+                       
                         <div class="checkout__input__checkbox">
                             <label for="diff-acc">
                                 Ship to a different address?
@@ -92,7 +58,7 @@
                         </div>
                         <div class="checkout__input">
                             <p>Order notes<span>*</span></p>
-                            <input type="text"
+                            <input type="text" asp-for="OrderNotes"
                                    placeholder="Notes about your order, e.g. special notes for delivery.">
                         </div>
                     </div>

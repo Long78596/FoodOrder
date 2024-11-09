@@ -4,8 +4,11 @@ using FoodOrder.Models;
 using FoodOrder.Models.ViewModels;
 using FoodOrder.Repository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace FoodOrder.Controllers
 {
@@ -24,11 +27,20 @@ namespace FoodOrder.Controllers
         {
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
             var coupon_code = Request.Cookies["CouponTitle"];
+            var shippingPriceCookie = Request.Cookies["ShippingPrice"];
+            double shippingPrice = 0; 
+
+            if (!string.IsNullOrEmpty(shippingPriceCookie))
+            {
+                shippingPrice = JsonConvert.DeserializeObject<double>(shippingPriceCookie);
+            }
+
             CartItemViewModel cartVM = new()
             {
                 CartItems = cart,
                 GrandTotal = cart.Sum(x => x.Quantity * x.Price),
                 CouponCode=coupon_code,
+                ShippingCost=shippingPrice,
             };
             return View(cartVM);
         }
@@ -121,16 +133,27 @@ namespace FoodOrder.Controllers
         }
         public async Task<IActionResult> Increase(int Id)
         {
-            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
-            CartItemModel giohangVM = cart.Where(c => c.FoodId == Id).FirstOrDefault();
-            if (giohangVM.Quantity >= 1)
+            FoodModel product = await _dataContext.Foods.Where(p => p.Id == Id).FirstOrDefaultAsync();
+
+            List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
+            CartItemModel cartItem = cart.FirstOrDefault(x => x.FoodId == Id);
+
+            if (product == null || cartItem == null)
             {
-                ++giohangVM.Quantity;
+                _notyfService.Error("Sản phẩm không tồn tại trong giỏ hàng hoặc không có sẵn.");
+                return RedirectToAction("Index");
+            }
+
+            if (cartItem.Quantity + 1 > product.Quantity)
+            {
+                _notyfService.Error($"Số lượng yêu cầu vượt quá số lượng hiện có. Hiện chỉ còn {product.Quantity} sản phẩm có thể đáp ứng.");
             }
             else
             {
-                cart.RemoveAll(c => c.FoodId == Id);
+                cartItem.Quantity++;
+                _notyfService.Success("Tăng số lượng sản phẩm thành công!");
             }
+
             if (cart.Count == 0)
             {
                 HttpContext.Session.Remove("Cart");
@@ -139,11 +162,10 @@ namespace FoodOrder.Controllers
             {
                 HttpContext.Session.SetJson("Cart", cart);
             }
-            _notyfService.Success("Tăng số lượng thành công!");
-
 
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> Remove(int Id)
         {
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart");
@@ -215,6 +237,42 @@ namespace FoodOrder.Controllers
 
             return Json(new { CouponTitle= couponTitle });
         }
+        [HttpPost]
+        [Route("Cart/GetShipping")]
+        public async Task<IActionResult> GetShipping(ShippingModel shipping, string quan , string phuong, string tinh)
+        {
+            var existingShipping = await _dataContext.Shippings.FirstOrDefaultAsync(x => x.City == tinh && x.Dictric == quan && x.Ward == phuong);
 
+            double shippingPrice = 0;
+            if(existingShipping != null)
+            {
+                shippingPrice = existingShipping.Price;
+            }
+            else
+            {
+                shippingPrice = 15000;
+            }
+            var shippingPriceJson = JsonConvert.SerializeObject(shippingPrice);
+            try
+            {
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Expires = DateTimeOffset.UtcNow.AddMinutes(30),
+                    Secure=true,
+                };
+                Response.Cookies.Append("ShippingPrice", shippingPriceJson, cookieOptions);
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Lỗi");
+            }
+            return Json(new { shippingPrice });
+
+        }
+       
+        
+        
     }
 }

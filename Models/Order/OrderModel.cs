@@ -11,9 +11,10 @@ namespace FoodOrder.Models.Order
         public string? UserName { get; set; }
         public DateTime CreateDate { get; set; }
         public bool Status { get; set; }
-        public int FoodId { get; set; }
-        [ForeignKey("FoodId")]
+        public string Phone { get; set; }
+        public string Address { get; set; } // Địa chỉ cụ thể
+        public string? OrderNotes { get; set; } // Ghi chú đơn hàng
 
-        public FoodModel Food { get; set; }
+
     }
 }

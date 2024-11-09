@@ -4,6 +4,7 @@ using FoodOrder.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodOrder.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241109075000_editdb")]
+    partial class editdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,24 +250,16 @@ namespace FoodOrder.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Coupon")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("FoodId")
+                        .HasColumnType("int");
+
                     b.Property<string>("OrderCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrderNotes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -278,6 +273,8 @@ namespace FoodOrder.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FoodId");
 
                     b.ToTable("Orders");
                 });
@@ -327,8 +324,8 @@ namespace FoodOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Ward")
                         .IsRequired()
@@ -500,6 +497,15 @@ namespace FoodOrder.Migrations
                     b.Navigation("Food");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("FoodOrder.Models.Order.OrderModel", b =>
+                {
+                    b.HasOne("FoodOrder.Models.FoodModel", "Food")
+                        .WithMany()
+                        .HasForeignKey("FoodId");
+
+                    b.Navigation("Food");
                 });
 
             modelBuilder.Entity("FoodOrder.Models.RatingModel", b =>

@@ -18,10 +18,12 @@ namespace FoodOrder.Models.Order
 
         public int OrderId { get; set; }
         [ForeignKey("OrderId")]
+        
 
         public OrderModel Order { get; set; }
-        public string AppUserId { get; set; }
-        [ForeignKey("AppUserId")]
-        public AppUserModel AppUser { get; set; }
+        
+        public int FoodId { get; set; }
+        [ForeignKey("FoodId")]
+        public FoodModel Food { get; set; }
     }
 }

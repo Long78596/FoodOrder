@@ -20,5 +20,24 @@ namespace FoodOrder.Data
         public DbSet<RatingModel> Ratings { get; set; }
         public DbSet<OrderModel>  Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Order)
+                .WithMany()  
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);  
+
+           
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Food)
+                .WithMany()  
+                .HasForeignKey(od => od.FoodId)
+                .OnDelete(DeleteBehavior.NoAction);  
+        }
     }
+
 }

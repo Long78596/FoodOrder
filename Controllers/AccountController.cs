@@ -11,6 +11,7 @@ using System.Security.Claims;
 using FoodOrder.Areas.Admin.Repository;
 using Microsoft.EntityFrameworkCore;
 using FoodOrder.Data;
+using Microsoft.AspNetCore.Authentication.Facebook;
 
 namespace FoodOrder.Controllers
 {
@@ -257,6 +258,67 @@ namespace FoodOrder.Controllers
                 _notyfService.Error("Email ko tồn tại hoặc token ko tồn tại ");
                 return RedirectToAction("ForgetPass", "Account");
             }
+        }
+        public async Task Facebook()
+        {
+            await HttpContext.ChallengeAsync(FacebookDefaults.AuthenticationScheme,
+                new AuthenticationProperties
+                {
+                    RedirectUri = Url.Action("FacebookResponse")
+
+                });
+        }
+        public async Task<IActionResult> FacebookResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(FacebookDefaults.AuthenticationScheme);
+            if (!result.Succeeded)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            });
+
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+            if (string.IsNullOrEmpty(email))
+            {
+                _notyfService.Error("Không thể lấy email từ Facebook");
+                return RedirectToAction("Login", "Account");
+            }
+
+            string UserName = email.Split('@')[0];
+            var existingUser = await _userManager.FindByEmailAsync(email);
+            if (existingUser == null)
+            {
+                var passwordHasher = new PasswordHasher<AppUserModel>();
+                var hashedPassword = passwordHasher.HashPassword(null, "123456qa");
+                var newUser = new AppUserModel { UserName = UserName, Email = email };
+                newUser.PasswordHash = hashedPassword;
+                var createUserResult = await _userManager.CreateAsync(newUser);
+                if (!createUserResult.Succeeded)
+                {
+                    _notyfService.Error("Đăng nhập thất bại");
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    await _signInManager.SignInAsync(newUser, isPersistent: false);
+                    _notyfService.Success("Đăng ký thành công");
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                await _signInManager.SignInAsync(existingUser, isPersistent: false);
+                _notyfService.Success("Đăng nhập thành công");
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Login", "Account");
         }
 
 

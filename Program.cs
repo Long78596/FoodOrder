@@ -83,6 +83,11 @@ namespace FoodOrder
 
             });
 
+            builder.Services.AddAuthentication().AddFacebook(opt =>
+ {
+     
+ });
+
            
 
             var app = builder.Build();
