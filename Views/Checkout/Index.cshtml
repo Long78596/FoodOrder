@@ -148,39 +148,7 @@
     </div>
 </section>
 <
-<div class="row">
-    <div class="col-9">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <div class="form-group">
-            <label>Chọn Tỉnh thành phố</label>
-            <select class="form-control css_select" name="tinh" id="tinh" title="chọn Tỉnh thành">
-                <option value="0">Tỉnh/Thành phố</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Chọn Quận/Huyện</label>
-            <select class="form-control css_select" name="quan" id="quan" title="chọn quận huyện">
-                <option value="0">Quận huyện</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Chọn Phường/Xã</label>
-            <select class="form-control css_select" name="phuong" id="phuong" title="chọn phường xã">
-                <option value="0">Phường xã</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <button type="button" class="btn btn-primary btn-add-shipping" type="submit">
-                Create
-            </button>
-        </div>
-        <a asp-action="Index" asp-controller="Shipping">Back to list shopping</a>
-    </div>
-</div>
 
 @section Scripts {
     @{

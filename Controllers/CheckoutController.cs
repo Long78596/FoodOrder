@@ -51,7 +51,7 @@ namespace FoodOrder.Controllers
        
         public async Task<IActionResult> Index1()
         {
-            return PartialView();
+            return View();
         }
             
         
