@@ -51,8 +51,9 @@
                         <li><a href="./contact.html">Contact</a></li>
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
-                          
+
                             <li><a asp-action="Checkout" asp-controller="Cart">Thanh toán</a></li>
+                            <li><a asp-action="Index" asp-controller="Customer">Quản lý thông tin cá nhân</a></li>
                             <li><a >Hi,@User.Identity.Name</a></li>
                             <li><a asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
                         }

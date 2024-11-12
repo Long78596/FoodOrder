@@ -10,10 +10,17 @@ namespace FoodOrder.Models.Order
         public string? Coupon { get; set; }
         public string? UserName { get; set; }
         public DateTime CreateDate { get; set; }
-        public bool Status { get; set; }
+        public int Status { get; set; }
         public string Phone { get; set; }
-        public string Address { get; set; } // Địa chỉ cụ thể
-        public string? OrderNotes { get; set; } // Ghi chú đơn hàng
+        public string Address { get; set; } 
+        public string? OrderNotes { get; set; } 
+        public DateTime? Delivery_Date { get; set; }
+        public int? Delivery_Status { get; set; }
+
+        public int? ShipperId { get; set; }
+        [ForeignKey("ShipperId")]
+        public ShipperModel Shipper { get; set; }
+
 
 
     }

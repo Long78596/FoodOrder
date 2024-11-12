@@ -124,7 +124,7 @@ namespace FoodOrder.Areas.Admin.Controllers
 
             exists_food.Title = monan.Title;
             exists_food.Description = monan.Description;
-            //exists_food.DiaChiQuan = monan.DiaChiQuan;
+            exists_food.CapitalPrice = monan.CapitalPrice;
             exists_food.Quantity = monan.Quantity;
             exists_food.Price = monan.Price;
             //exists_food.Video = monan.Video;

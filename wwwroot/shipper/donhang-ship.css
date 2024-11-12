@@ -1,0 +1,14 @@
+.logo-ship{
+    width: 60px;
+}
+.collapse>ul>li{
+    padding-left: 30px;
+}
+.collapse>ul>li>a{
+    font-size: 20px;
+    font-weight: 600;
+}
+.sdt{
+    text-decoration: none;
+    color: black;
+}

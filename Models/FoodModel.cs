@@ -27,7 +27,7 @@ namespace FoodOrder.Models
         [Range(0.01, double.MaxValue, ErrorMessage = "Giá món ăn phải lớn hơn 0")]
         public double Price { get; set; }
 
-        
+        public double? CapitalPrice { get; set; }
 
         [Required(ErrorMessage = "Yêu cầu nhập Ngày tạo")]
         [DataType(DataType.DateTime)]

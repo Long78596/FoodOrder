@@ -319,6 +319,44 @@ namespace FoodOrder.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return RedirectToAction("Login", "Account");
+        
+        
+        }
+        [HttpGet]
+        public async Task<IActionResult> History()
+        {
+            if ((bool)!User.Identity?.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var orders = await _dataContext.Orders.Where(od => od.UserName == userEmail).OrderByDescending(od => od.Id).ToListAsync();
+            ViewBag.UserEmail = userEmail;
+            return View(orders);
+        
+        }
+        public async Task<IActionResult> CancelOrder(string ordercode)
+        {
+            if ((bool)!User.Identity?.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            try
+            {
+                var order = await _dataContext.Orders.Where(o => o.OrderCode == ordercode).FirstAsync();
+                order.Status = 3;
+                _dataContext.Update(order);
+                await _dataContext.SaveChangesAsync();
+
+
+            }catch(Exception ex)
+            {
+                return BadRequest("An error occured while cancelling the order");
+
+            }
+            _notyfService.Error("hủy đơn hàng thành công!");
+            return RedirectToAction("History", "Account");
         }
 
 

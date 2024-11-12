@@ -57,7 +57,7 @@
 <!-- Shoping Cart Section Begin -->
 <section class="shoping-cart spad">
     <div class="container">
-        <form asp-action="UpdateCart" asp-controller="Cart"  method="post">
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="shoping__cart__table">
@@ -77,7 +77,7 @@
                           
                                 @foreach (var item in Model.CartItems)
                                 {
-                                    
+                                            <form asp-action="UpdateCart" asp-controller="Cart"  asp-route-Id="@item.FoodId">
 
                                     <tr>
                                         <td class="shoping__cart__item">
@@ -90,10 +90,7 @@
                                         <td class="shoping__cart__quantity">
                                             <div class="quantity">
                                                 <div class="pro-qty">
-                                                        <a asp-action="Decrease" asp-controller="Cart" asp-route-Id="@item.FoodId"><span class="dec qtybtn">-</span></a>
-                                                        <input type="hidden" name="FoodId" />
-                                                        <input type="text" name="quantity" value="@item.Quantity">
-                                                        <a asp-action="Increase" asp-controller="Cart" asp-route-Id="@item.FoodId"> <span class="inc qtybtn">+</span></a>
+                                                    <input type="text" Id="quantity" name="quantity" value="@item.Quantity">
                                                 </div>
                                             </div>
                                         </td>
@@ -103,9 +100,22 @@
                                         <td class="shoping__cart__item__close">
                                             <a asp-action="Remove" asp-controller="Cart" asp-route-Id="@item.FoodId" class="btn btn-danger"><span class="icon_close"></span></a>
                                         </td>
+                                            
                                         
                                     </tr>
-                                    }
+                                    <tr  class="text-center">
+                                        <td colspan="8" class="shoping__cart__item__close">
+                                                <button type="submit" class="primary-btn ">
+                                                    <span class="icon_loading"></span> cập nhật
+                                                </button>
+                                            </td>
+                                    </tr>
+                                    </form>
+
+
+                                    
+                                
+                                }
                                
                                 </tbody>
                                 
@@ -118,14 +128,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
-                <div class="shoping__cart__btns">
-                    <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
-                        <button type="submit" class="primary-btn cart-btn cart-btn-right">
-                            <span class="icon_loading"></span> Update Cart
-                        </button>
-                </div>
-            </div>
+           
             <div class="col-lg-6">
                 <div class="shoping__continue">
                     <div class="shoping__discount">
@@ -138,62 +141,62 @@
                             </form>
                     </div>
                 </div>
-                    <div class="row">
-                        <div class="col-9">
+                <div class="row">
+                    <div class="col-9">
 
-                            <div asp-validation-summary="ModelOnly" class="text-danger">
-                            </div>
-
-
-
-
-                            <div class="form-group">
-                                <label>Chọn Tỉnh thành phố</label>
-                                <select class="form-control css_select" name="tinh" id="tinh" title="chọn Tỉnh thành">
-                                    <option value="0">Tỉnh/Thành phố</option>
-
-
-                                </select>
+                        <div asp-validation-summary="ModelOnly" class="text-danger">
+                        </div>
 
 
 
 
-                            </div>
-                            <div class="form-group">
-                                <label>Chọn Tỉnh thành phố</label>
-                                <select class="form-control css_select" name="quan" id="quan" title="chọn quận huyện">
-                                    <option value="0">Quận huyện</option>
+                        <div class="form-group">
+                            <label>Chọn Tỉnh thành phố</label>
+                            <select class="form-control css_select" name="tinh" id="tinh" title="chọn Tỉnh thành">
+                                <option value="0">Tỉnh/Thành phố</option>
 
 
-                                </select>
-
-
-                                </span>
-
-                            </div>
-                            <div class="form-group">
-                                <label>Chọn Tỉnh thành phố</label>
-                                <select class="form-control css_select" name="phuong" id="phuong" title="chọn phường xã">
-                                    <option value="0">Phường xã</option>
-
-
-                                </select>
-
-
-                                </span>
-
-                            </div>
-                            
+                            </select>
 
 
 
-                            <div class="form-group">
-                                <button type="button" class="btn btn-primary btn-add-shipping" type="submit">
-                                    tính phí ship
-                                </button>
-                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label>Chọn Tỉnh thành phố</label>
+                            <select class="form-control css_select" name="quan" id="quan" title="chọn quận huyện">
+                                <option value="0">Quận huyện</option>
+
+
+                            </select>
+
+
+                            </span>
+
+                        </div>
+                        <div class="form-group">
+                            <label>Chọn Tỉnh thành phố</label>
+                            <select class="form-control css_select" name="phuong" id="phuong" title="chọn phường xã">
+                                <option value="0">Phường xã</option>
+
+
+                            </select>
+
+
+                            </span>
+
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary btn-add-shipping" type="submit">
+                                tính phí ship
+                            </button>
                         </div>
                     </div>
+                </div>
             </div>
             <div class="col-lg-6">
                 <div class="shoping__checkout">
@@ -207,7 +210,7 @@
                 </div>
             </div>
         </div>
-        </form>
+        
     </div>
 </section>
 
@@ -242,7 +245,7 @@
             var phuong = $("#phuong").find("option:selected").text();
 
             // var price = $("#price-shipping").val();
-            if (tinh == "" || quan == "" || phuong == "" ) {
+            if (tinh == "" || quan == "" || phuong == "") {
                 alert("Làm ơn ko bỏ trống");
             } else {
                 $.ajax({

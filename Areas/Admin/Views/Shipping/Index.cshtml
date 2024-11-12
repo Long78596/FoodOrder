@@ -102,10 +102,14 @@
                 <td>@shipping.Ward</td>
                 <td>@shipping.Price.ToString("#,##0 VND")</td>
                 <td>
-                    <a href="@Url.Action("Delete", "Shipping", new { id = shipping.Id })" class="btn btn-danger">Delete</a>
+                    <!-- Form để gửi HTTP DELETE -->
+                    <form action="@Url.Action("Delete", "Shipping", new { Id = shipping.Id })" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
         }
+
     </tbody>
 
 </table>

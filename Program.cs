@@ -88,7 +88,25 @@ namespace FoodOrder
      
  });
 
-           
+
+      builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+     
+   
+ .AddCookie("ShipperScheme", options =>
+ {
+     options.LoginPath = "/Shipper/Account/Login";
+     options.LogoutPath = "/Shipper/Account/login";
+     options.AccessDeniedPath = "/Shipper/Account/Login";
+ });
+
+            // Configure Authorization Policies
+            builder.Services.AddAuthorization(options =>
+            {
+                
+                options.AddPolicy("ShipperPolicy", policy =>
+                    policy.RequireClaim("Role", "Shipper")); ;
+            });
+
 
             var app = builder.Build();
             app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");

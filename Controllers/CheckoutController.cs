@@ -74,14 +74,20 @@ namespace FoodOrder.Controllers
                 var orderItem = new OrderModel();
                 orderItem.OrderCode = ordercode;
 
-               
+
                 var shippingPriceCookie = Request.Cookies["ShippingPrice"];
                 double shippingPrice = 0;
-                if (shippingPrice != null)
+
+                if (shippingPriceCookie != null)
                 {
                     var shippingPriceJson = shippingPriceCookie;
                     shippingPrice = JsonConvert.DeserializeObject<double>(shippingPriceJson);
                 }
+                else
+                {
+                    shippingPrice = 0; 
+                }
+
                 var coupon_code = Request.Cookies["CouponTitle"];
 
                 orderItem.Coupon = coupon_code;
@@ -90,7 +96,10 @@ namespace FoodOrder.Controllers
                 orderItem.Phone = model.Phone;                
                 orderItem.Address = model.Address;
                 orderItem.OrderNotes = model.OrderNotes;
-                orderItem.Status = true;
+                orderItem.Status = 1;
+                orderItem.Delivery_Date = DateTime.Now;
+                orderItem.Delivery_Status = 0;
+                orderItem.ShipperId=1;
                 orderItem.CreateDate = DateTime.Now;
                 _datacontext.Add(orderItem);
                 _datacontext.SaveChanges();
@@ -129,7 +138,7 @@ namespace FoodOrder.Controllers
 
 
                 _notyfService.Success("Thanh toán thành công, vui lòng kiểm tra gmail của bạn!");
-                return RedirectToAction("Index", "Cart");
+                return RedirectToAction("History", "Account");
             }
             return View();
         }

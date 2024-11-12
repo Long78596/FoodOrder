@@ -165,6 +165,9 @@ namespace FoodOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double?>("CapitalPrice")
+                        .HasColumnType("float");
+
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
@@ -257,6 +260,12 @@ namespace FoodOrder.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("Delivery_Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Delivery_Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("OrderCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -268,16 +277,21 @@ namespace FoodOrder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShipperId")
+                        .HasColumnType("int");
+
                     b.Property<double?>("ShippingCost")
                         .HasColumnType("float");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ShipperId");
 
                     b.ToTable("Orders");
                 });
@@ -311,6 +325,38 @@ namespace FoodOrder.Migrations
                     b.ToTable("Ratings");
                 });
 
+            modelBuilder.Entity("FoodOrder.Models.ShipperModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Shippers");
+                });
+
             modelBuilder.Entity("FoodOrder.Models.ShippingModel", b =>
                 {
                     b.Property<int>("Id")
@@ -337,6 +383,34 @@ namespace FoodOrder.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Shippings");
+                });
+
+            modelBuilder.Entity("FoodOrder.Models.StatisticalModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Profit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity_Sold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Revenue")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sold_Order")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Statisticals");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -500,6 +574,15 @@ namespace FoodOrder.Migrations
                     b.Navigation("Food");
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("FoodOrder.Models.Order.OrderModel", b =>
+                {
+                    b.HasOne("FoodOrder.Models.ShipperModel", "Shipper")
+                        .WithMany()
+                        .HasForeignKey("ShipperId");
+
+                    b.Navigation("Shipper");
                 });
 
             modelBuilder.Entity("FoodOrder.Models.RatingModel", b =>

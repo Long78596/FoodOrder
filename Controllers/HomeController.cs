@@ -110,6 +110,11 @@ namespace FoodOrder.Controllers
         //}
         public async Task<IActionResult> Search(string searchtern)
         {
+            if (string.IsNullOrWhiteSpace(searchtern))
+            {
+                _notyfService.Error("Vui lòng nhập từ khóa tìm kiếm! ");
+                return Redirect(Request.Headers["Referer"]);
+            }
             var products = await _dataContext.Foods.Where(p => p.Title.Contains(searchtern) || p.Description.Contains(searchtern)).ToListAsync();
             ViewBag.Keyword = searchtern;
             return View(products);

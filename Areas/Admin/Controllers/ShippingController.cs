@@ -1,4 +1,5 @@
-﻿using FoodOrder.Data;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using FoodOrder.Data;
 using FoodOrder.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,11 @@ namespace FoodOrder.Areas.Admin.Controllers
     public class ShippingController : Controller
     {
         private readonly DataContext _dataContext;
-        public ShippingController(DataContext dataContext)
+        private readonly INotyfService _notyfService;
+        public ShippingController(DataContext dataContext,INotyfService notyfService)
         {
             _dataContext = dataContext;
+            _notyfService = notyfService;
 
         }
         [HttpGet]
@@ -56,16 +59,34 @@ namespace FoodOrder.Areas.Admin.Controllers
                 return StatusCode(500, "An error occured while adding shipping");
             }
         }
-        [HttpDelete]
+        [HttpPost]       
+        
         [Route("Delete")]
         public async Task<IActionResult> Delete(int Id)
         {
-            ShippingModel shipping = await _dataContext.Shippings.FindAsync(Id);
-            _dataContext.Shippings.Remove(shipping);
-            await _dataContext.SaveChangesAsync();
-          
-            return RedirectToAction("Index", "Shipping");
+            try
+            {
+                ShippingModel shipping = await _dataContext.Shippings.FindAsync(Id);
+
+                if (shipping == null)
+                {
+                    _notyfService.Warning("Không tìm thấy đơn hàng để xóa.");
+                    return RedirectToAction("Index", "Shipping");
+                }
+
+                _dataContext.Shippings.Remove(shipping);
+                await _dataContext.SaveChangesAsync();
+
+                _notyfService.Success("Xóa đơn hàng thành công!");
+                return RedirectToAction("Index", "Shipping");
+            }
+            catch (Exception ex)
+            {
+                _notyfService.Error("Đã xảy ra lỗi khi xóa đơn hàng: " + ex.Message);
+                return RedirectToAction("Index", "Shipping");
+            }
         }
+
 
     }
 }

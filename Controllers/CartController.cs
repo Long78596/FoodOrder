@@ -49,6 +49,11 @@ namespace FoodOrder.Controllers
             FoodModel foods = await _dataContext.Foods.FindAsync(Id);
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
             CartItemModel GiohangItems = cart.Where(c => c.FoodId == Id).FirstOrDefault();
+            if (quantity > foods.Quantity) 
+            {
+                _notyfService.Warning("Không thể thêm vào giỏ. Số lượng yêu cầu vượt quá số lượng đang có.");
+                return Redirect(Request.Headers["Referer"]);
+            }
             if (GiohangItems == null)
             {
                 CartItemModel gioHangItem = new  CartItemModel(foods)
@@ -68,9 +73,9 @@ namespace FoodOrder.Controllers
             HttpContext.Session.SetJson("Cart", cart);
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> UpdateCart(int FoodId, int quantity)
+        public async Task<IActionResult> UpdateCart(int Id, int quantity)
         {
-            FoodModel foodItem = await _dataContext.Foods.FindAsync(FoodId);
+            FoodModel foodItem = await _dataContext.Foods.FindAsync(Id);
             if (foodItem == null)
             {
                 _notyfService.Error("Sản phẩm không tồn tại.");
@@ -86,7 +91,7 @@ namespace FoodOrder.Controllers
             // Lấy giỏ hàng từ session
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
 
-            CartItemModel giohangVM = cart.FirstOrDefault(c => c.FoodId == FoodId);
+            CartItemModel giohangVM = cart.FirstOrDefault(c => c.FoodId == Id);
 
             if (giohangVM != null)
             {

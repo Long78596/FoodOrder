@@ -1,252 +1,195 @@
-﻿<div class="card">
-    <div class="card-body">
-        <div class="d-lg-flex align-items-center mb-4 gap-3">
-            <div class="position-relative">
-                <input type="text" class="form-control ps-5 radius-30" placeholder="Search "
-                       fdprocessedid="zfepxg"> <span class="position-absolute top-50 product-show translate-middle-y">
-                    <i class="bx bx-search"></i>
-                </span>
-            </div>
-            <div class="ms-auto">
-                <a href="javascript:;" class="btn btn-primary radius-30 mt-2 mt-lg-0">
-                    <i class="bx bxs-plus-square"></i>Add staff
-                </a>
-            </div>
-        </div>
-        <div class="table-responsive">
-            <table class="table mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Id#</th>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Status</th>
-                        <th>Total Earning</th>
-                        <th>Total Dayoff</th>
-                        <th>Date of birth</th>
-                        <th>Gender</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Roles</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input class="form-check-input me-3" type="checkbox" value=""
-                                           aria-label="...">
-                                </div>
-                                <div class="ms-2">
-                                    <h6 class="mb-0 font-14">#OS-000354</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Gaspur Antunes</td>
-                        <td>HR manager</td>
-                        <td>
-                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">
-                                <i class="bx bxs-circle me-1"></i>Fulltime
-                            </div>
-                        </td>
-                        <td>$485.20</td>
-                        <td>$20</td>
-                        <td>June 10, 2020</td>
-                        <td>Male</td>
+﻿@model StatisticalModel
+<div class="page-wrapper">
+	<div class="page-content">
+		<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2 row-cols-xxl-4">
+			<div class="col">
+				<div class="card radius-10 bg-gradient-cosmic">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<div class="me-auto">
+								<p class="mb-0 text-white">Thống kê đơn hàng</p>
+								<h4 class="my-1 text-white">@ViewBag.CountOrder</h4>
+							</div>
+							<div id="chart1"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card radius-10 bg-gradient-ibiza">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<div class="me-auto">
+								<p class="mb-0 text-white">Thống kê sản phẩm</p>
+								<h4 class="my-1 text-white">@ViewBag.CountFood</h4>
+							</div>
+							<div id="chart2"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card radius-10 bg-gradient-ohhappiness">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<div class="me-auto">
+								<p class="mb-0 text-white">Thống kê user</p>
+								<h4 class="my-1 text-white">  @ViewBag.CountUser</h4>
+							</div>
+							<div id="chart3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card radius-10 bg-gradient-kyoto">
+					<div class="card-body">
+						<div class="d-flex align-items-center">
+							<div class="me-auto">
+								<p class="mb-0 text-dark">Thống kê danh mục</p>
+								<h4 class="my-1 text-dark">@ViewBag.CountCategory</h4>
+							</div>
+							<div id="chart4"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--end row-->
 
-                        <td>Gas@gmail.com</td>
-                        <td>0905807623</td>
-                        <td>Newyork City</td>
-                        <td>Operating</td>
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-12">
+					<h4>Lọc dữ liệu theo:</h4>
+					<select class="filter-select">
+						<option value="30">---Lọc dữ liệu---</option>
+						<option value="7">7 ngày trước</option>
+						<option value="30">tháng qua</option>
+						<option value="90">3 tháng trước</option>
+						<option value="365">1 năm</option>
 
-                        <td>
-                            <div class="d-flex order-actions">
-                                <a href="javascript:;" class=""><i class="bx bxs-edit"></i></a>
-                                <a href="javascript:;" class="ms-3"><i class="bx bxs-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
-                                </div>
-                                <div class="ms-2">
-                                    <h6 class="mb-0 font-14">#OS-000354</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Viet Duc</td>
-                        <td>HR Director</td>
-                        <td>
-                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">
-                                <i class="bx bxs-circle me-1"></i>Fulltime
-                            </div>
-                        </td>
-                        <td>$485.20</td>
-                        <td>$20</td>
-                        <td>June 10, 2020</td>
-                        <td>Male</td>
 
-                        <td>vietduc@gmail.com</td>
-                        <td>0905807623</td>
-                        <td>Ha noi City</td>
-                        <td>Director</td>
+					</select>
+					
+						<h4>Tùy chọn:</h4>
+						<label>Từ ngày:</label>
+						<input type="date" class="form-control" id="date_form" asp-for="@Model.DateCreated" />
+						<label>Đến ngày:</label>
+						<input type="date" class="form-control" id="date_to" asp-for="@Model.DateCreated" />
+						<button id="filterButton" class="btn btn-success">Lọc</button>
+				
 
-                        <td>
-                            <div class="d-flex order-actions">
-                                <a href="javascript:;" class=""><i class="bx bxs-edit"></i></a>
-                                <a href="javascript:;" class="ms-3"><i class="bx bxs-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
-                                </div>
-                                <div class="ms-2">
-                                    <h6 class="mb-0 font-14">#OS-000354</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Pham Quang Nga</td>
-                        <td>Project manager</td>
-                        <td>
-                            <div class="badge rounded-pill text-warning bg-light-warning p-2 text-uppercase px-3">
-                                <i class="bx bxs-circle me-1"></i>Farttime
-                            </div>
-                        </td>
-                        <td>$485.20</td>
-                        <td>$20</td>
-                        <td>June 10, 2020</td>
-                        <td>Male</td>
+					<div id="myfirstchart" style="height: 250px;"></div>
+				</div>
+			</div><!--end row-->
+		</div>
 
-                        <td>Gas@gmail.com</td>
-                        <td>0905807623</td>
-                        <td>Da nang city</td>
-                        <td>Project manager</td>
-
-                        <td>
-                            <div class="d-flex order-actions">
-                                <a href="javascript:;" class=""><i class="bx bxs-edit"></i></a>
-                                <a href="javascript:;" class="ms-3"><i class="bx bxs-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
-                                </div>
-                                <div class="ms-2">
-                                    <h6 class="mb-0 font-14">#OS-000355</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Nguyen Thanh Long</td>
-                        <td>HR Assisant</td>
-                        <td>
-                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">
-                                <i class="bx bxs-circle me-1"></i>Fulltime
-                            </div>
-                        </td>
-                        <td>$485.20</td>
-                        <td>$20</td>
-                        <td>June 10, 2003</td>
-                        <td>Male</td>
-
-                        <td>Gas@gmail.com</td>
-                        <td>0905807623</td>
-                        <td>Quang Nam City</td>
-                        <td>HR Assisant</td>
-
-                        <td>
-                            <div class="d-flex order-actions">
-                                <a href="javascript:;" class=""><i class="bx bxs-edit"></i></a>
-                                <a href="javascript:;" class="ms-3"><i class="bx bxs-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
-                                </div>
-                                <div class="ms-2">
-                                    <h6 class="mb-0 font-14">#OS-000354</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Nguyen Duc Thang</td>
-                        <td>Account</td>
-                        <td>
-                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">
-                                <i class="bx bxs-circle me-1"></i>Fulltime
-                            </div>
-                        </td>
-                        <td>$485.20</td>
-                        <td>$20</td>
-                        <td>June 10, 2020</td>
-                        <td>Male</td>
-
-                        <td>Gas@gmail.com</td>
-                        <td>0905807623</td>
-                        <td>Thanh hoa city</td>
-                        <td>Account</td>
-
-                        <td>
-                            <div class="d-flex order-actions">
-                                <a href="javascript:;" class=""><i class="bx bxs-edit"></i></a>
-                                <a href="javascript:;" class="ms-3"><i class="bx bxs-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div>
-                                    <input class="form-check-input me-3" type="checkbox" value="" aria-label="...">
-                                </div>
-                                <div class="ms-2">
-                                    <h6 class="mb-0 font-14">#OS-000354</h6>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Gaspur join </td>
-                        <td>Vp Finance</td>
-                        <td>
-                            <div class="badge rounded-pill text-success bg-light-success p-2 text-uppercase px-3">
-                                <i class="bx bxs-circle me-1"></i>Fulltime
-                            </div>
-                        </td>
-                        <td>$485.20</td>
-                        <td>$20</td>
-                        <td>June 10, 2020</td>
-                        <td>Male</td>
-
-                        <td>Gas@gmail.com</td>
-                        <td>0905807623</td>
-                        <td>Japan City</td>
-                        <td>Vp Finance</td>
-
-                        <td>
-                            <div class="d-flex order-actions">
-                                <a href="javascript:;" class=""><i class="bx bxs-edit"></i></a>
-                                <a href="javascript:;" class="ms-3"><i class="bx bxs-trash"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
+		
+	</div>
 </div>
+@section Scripts{
+	<script>
+		$(document).ready(function () {
+			
+			var ChartMorris = new Morris.Line({
+				element: 'myfirstchart',
+				data: [],
+				xkey: 'date',
+				ykeys: ['sold', 'quantity', 'revenue', 'profit'],
+				labels: ["Số lượng bán ra", "Đơn hàng", "Doanh thu", "Lợi nhuận"]
+			});
+
+			
+			$.ajax({
+				url: "@Url.Action("GetChartData", "Dashboard")",
+				type: "POST",
+				dataType: "json",
+				success: function (data) {
+					if (data) {
+						ChartMorris.setData(data.map(function (item) {
+							return {
+								date: item.date,
+								sold: item.sold,
+								quantity: item.quantity,
+								revenue: item.revenue,
+								profit: item.profit
+							};
+						}));
+					} else {
+						console.warn("Dữ liệu chưa cập nhật");
+						ChartMorris.setData([]);
+					}
+				},
+				error: function (error) {
+					console.error("Đã xảy ra lỗi:", error);
+				}
+			});
+
+			// Handle filter select change event
+			$('.filter-select').on('change', function () {
+				var days = $(this).val();
+				var endDate = new Date();  // Current date
+				var startDate = new Date(endDate.getTime() - days * 24 * 60 * 60 * 1000);  // Calculate start date
+
+				$.ajax({
+					url: "@Url.Action("GetChartDataBySelect", "Dashboard")",
+					type: "POST",
+					dataType: "json",
+					data: {
+						startDate: startDate.toISOString().split('T')[0],  // Format as YYYY-MM-DD
+						endDate: endDate.toISOString().split('T')[0]
+					},
+					success: function (data) {
+						if (data) {
+							ChartMorris.setData(data.map(function (item) {
+								return {
+									date: item.date,
+									sold: item.sold,
+									quantity: item.quantity,
+									revenue: item.revenue,
+									profit: item.profit
+								};
+							}));
+						} else {
+							console.warn("Không có dữ liệu nhận được để cập nhật biểu đồ Morris.");
+						}
+					},
+					error: function (error) {
+						console.error("Lỗi khi lấy dữ liệu cho biểu đồ:", error);
+					}
+				});
+			});
+
+			$("#filterButton").click(function () {
+				var formDate = $("#date_form").val();
+				var toDate = $("#date_to").val();
+
+				$.ajax({
+					url: "@Url.Action("FilterData", "Dashboard")",
+					type: "POST", 
+					data: { formDate: formDate, toDate: toDate },
+					dataType: "json",
+					success: function (data) {
+						if (data) {
+							ChartMorris.setData(data.map(function (item) {
+								return {
+									date: item.date,
+									sold: item.sold,
+									quantity: item.quantity,
+									revenue: item.revenue,
+									profit: item.profit
+								};
+							}));
+						} else {
+							console.warn("Không có dữ liệu nhận được để cập nhật biểu đồ Morris.");
+							ChartMorris.setData([]);
+						}
+					},
+					error: function (error) {
+						console.error("Lỗi khi lấy dữ liệu cho biểu đồ:", error);
+					}
+				});
+			});
+		});
+	</script>
+
+}

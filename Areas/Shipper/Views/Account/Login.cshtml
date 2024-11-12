@@ -1,0 +1,134 @@
+﻿@model FoodOrder.Models.ViewModels.LoginViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="login-shipper.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            line-height: 1.5;
+            min-height: 100vh;
+            background: #f3f3f3;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        .main {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            padding: 10px 20px;
+            transition: transform 0.2s;
+            width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4CAF50;
+        }
+
+        label {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-align: left;
+            color: #555;
+            font-weight: bold;
+        }
+
+
+        input {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            background-color: #4CAF50;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1>Food Order</h1>
+        <h3>Đăng nhập</h3>
+        <form asp-action="Login" asp-controller="Account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <label for="first">
+                Tên tài khoản
+            </label>
+            <input type="text"
+                   asp-for="UserName"
+                   placeholder="Nhập tên">
+            <span asp-validation-for="UserName" class="text-danger"></span>
+
+            <label for="password">
+                Mật khẩu
+            </label>
+            <input type="password"
+                   asp-for="Password"
+                   placeholder="Nhập mật khẩu">
+            <span asp-validation-for="Password" class="text-danger"></span>
+            <div class="wrap">
+                <button type="submit"
+                        onclick="solve()">
+                    Đăng nhập
+                </button>
+            </div>
+        </form>
+        <p>
+            Quên mật khẩu ?
+            <a asp-action="QuenMatKhau" asp-controller="DangNhap"
+               style="text-decoration: none;">
+                Lấy lại mật khẩu
+            </a>
+        </p>
+        <p>
+            Đăng ký tài khoản ?
+            <a asp-action="Register" asp-controller="Account"
+               style="text-decoration: none;">
+                Đăng ký
+            </a>
+        </p>
+    </div>
+
+
+
+    <script src="~/login/vendor/jquery/jquery.min.js"></script>
+    <script src="~/login/js/main.js"></script>
+    @await Component.InvokeAsync("Notyf")
+
+    @section Scripts {
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+</body>
+</html>
