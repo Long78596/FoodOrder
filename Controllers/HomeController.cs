@@ -3,6 +3,7 @@ using FoodOrder.Data;
 using FoodOrder.Migrations;
 using FoodOrder.Models;
 using FoodOrder.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -161,7 +162,7 @@ namespace FoodOrder.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
+        [Authorize]
         public async Task<IActionResult> CommentFood(RatingModel rating)
         {
             // Danh sách các từ nhạy cảm

@@ -13,30 +13,27 @@
                         <a class="nav-link active" aria-current="page" href="#">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Đơn hàng</a>
+                        <a class="nav-link" asp-action="Order" asp-controller="Home">Đơn hàng</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
+                        <a class="nav-link" asp-action="Edit" asp-controller="Account">Thông tin</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Link</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Tìm</button>
-                </form>
+   
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="DangXuat" asp-controller="DangNhap">Đăng xuất</a>
+                            <a class="nav-link" asp-action="Logout" asp-controller="Account">Đăng xuất</a>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-action="Login" asp-controller="DangNhap">Đăng nhập</a>
+                            <a class="nav-link" asp-action="Login" asp-controller="Account">Đăng nhập</a>
                         </li>
                     }
                 </ul>

@@ -81,14 +81,14 @@
         <h1>Food Order</h1>
         <h3>Đăng nhập</h3>
         <form asp-action="Login" asp-controller="Account" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" style="color:red"></div>
             <label for="first">
                 Tên tài khoản
             </label>
             <input type="text"
                    asp-for="UserName"
                    placeholder="Nhập tên">
-            <span asp-validation-for="UserName" class="text-danger"></span>
+            <span asp-validation-for="UserName" style="color:red"></span>
 
             <label for="password">
                 Mật khẩu
@@ -96,7 +96,7 @@
             <input type="password"
                    asp-for="Password"
                    placeholder="Nhập mật khẩu">
-            <span asp-validation-for="Password" class="text-danger"></span>
+            <span asp-validation-for="Password" style="color:red"></span>
             <div class="wrap">
                 <button type="submit"
                         onclick="solve()">
@@ -106,7 +106,7 @@
         </form>
         <p>
             Quên mật khẩu ?
-            <a asp-action="QuenMatKhau" asp-controller="DangNhap"
+            <a asp-action="ForgetPass" asp-controller="Account"
                style="text-decoration: none;">
                 Lấy lại mật khẩu
             </a>

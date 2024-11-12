@@ -8,6 +8,7 @@ namespace FoodOrder.Areas.Shipper.Controllers
 {
 
     [Area("Shipper")]
+    //[Authorize]
   
     public class HomeController : Controller
     {
@@ -20,7 +21,7 @@ namespace FoodOrder.Areas.Shipper.Controllers
         }
         public IActionResult Index()
         {
-            var hoaDons = _dataContext.Orders.OrderByDescending(h => h.CreateDate).ToList();
+            var hoaDons = _dataContext.Orders.Where(d=>d.Delivery_Status == 0).OrderByDescending(h => h.CreateDate).ToList();
 
             var orderDetails = _dataContext.OrderDetails
                                 .Include(c=>c.Food)
@@ -34,23 +35,40 @@ namespace FoodOrder.Areas.Shipper.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult XulyDonHang(string ordercode)
+        public IActionResult Orderprocess(string ordercode)
         {
             var hoaDon = _dataContext.Orders.FirstOrDefault(h => h.OrderCode == ordercode);
             if (hoaDon != null)
             {
-                hoaDon.Status = 4;
+                hoaDon.Delivery_Status = 1;
                 _dataContext.SaveChanges();
+                _notyfService.Success("Xác nhận giao hàng thành công!");
+                return RedirectToAction("Index");
 
             }
             else
             {
                 _notyfService.Error("Đơn hàng không tồn tại!");
             }
-            _notyfService.Success("Xác nhận giao thành công!");
+            _notyfService.Success("Xác nhận giao hàng thành công!");
 
 
             return RedirectToAction("Index");
+        }
+        public IActionResult Order()
+        {
+            var hoaDons = _dataContext.Orders.Where(d => d.Delivery_Status == 1).OrderByDescending(h => h.CreateDate).ToList();
+
+            var orderDetails = _dataContext.OrderDetails
+                                .Include(c => c.Food)
+                                .Include(ct => ct.Order)
+                                .Where(ct => hoaDons.Select(h => h.OrderCode).Contains(ct.OrderCode))
+                                .ToList();
+
+            ViewBag.HoaDons = hoaDons;
+            ViewBag.OrderDetails = orderDetails;
+
+            return View();
         }
     }
 

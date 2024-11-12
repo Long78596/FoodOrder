@@ -12,8 +12,9 @@
 <body>
     @Html.Partial("_HeaderPartial")
     @RenderBody()
-    @await Component.InvokeAsync("Notyf")
 
+
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", required: false)
 </nav>
 </body>

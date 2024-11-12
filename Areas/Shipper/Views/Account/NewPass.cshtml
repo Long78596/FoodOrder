@@ -1,0 +1,113 @@
+﻿@model ShipperModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+          integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+          crossorigin="anonymous" />
+    <!-- Google Fonts  -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="forget.css">
+</head>
+<body>
+    <div class="card">
+        <p class="lock-icon"><i class="fas fa-lock"></i></p>
+        <h2>Đặt lại mật khẩu</h2>
+      
+        <form asp-action="UpdateNewPass" method="post">
+            <input type="hidden" name="token" value="@ViewBag.Token" />
+
+            <div>
+                <label asp-for="Email"></label>
+                <input asp-for="Email" readonly type="email" value="@ViewBag.Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="submit">Đặt lại mật khẩu</button>
+        </form>
+    </div>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8f8f8;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15rem 0;
+        }
+
+        .card {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(0, 0, 0, 0.75);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.125);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 50px;
+        }
+
+        .lock-icon {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 12px;
+        }
+
+        input {
+            margin-top: 15px;
+            width: 80%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid deepskyblue;
+            font-size: 15px;
+            color: white;
+            outline: none;
+        }
+
+        button {
+            margin-top: 15px;
+            width: 80%;
+            background-color: deepskyblue;
+            color: white;
+            padding: 10px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+    <script src="~/login/vendor/jquery/jquery.min.js"></script>
+    <script src="~/login/js/main.js"></script>
+    @await Component.InvokeAsync("Notyf")
+
+    @section Scripts {
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+</html>

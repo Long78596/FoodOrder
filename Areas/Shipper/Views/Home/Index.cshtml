@@ -1,62 +1,99 @@
-﻿<main>
-        <div class="container">
-            <div class="accordion" id="accordionExample">
-                <div class="accordion-item">
-                  <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Nơi nhận hàng : Hòa Phước - Hòa Vang - Đà Nẵng 
-                    </button>
-                  </h2>
-                  <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample" style="">
-                    <div class="accordion-body">
-                      <!-- <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow. -->
-                      <div class="card" style="width: 50rem;">
-                        <div class="card-header">
-                          Tên người nhận : Lê Hoàng Anh Tài
-                        </div>
-                        <ul class="list-group list-group-flush">
-                          <li class="list-group-item">
-                            <a class="sdt" href="">Số điện thoại : 0763058366</a>
-                          </li>
-                          <li class="list-group-item">Chi tiết địa chỉ : Tổ 3 - Thôn Tân Hạnh - Hòa Phước Hòa vang - Đà Nẵng</li>
-                          <li class="list-group-item">Ghi chú : Helooooooooo</li>
-                          <li class="list-group-item">Mã đơn hàng : 5235</li>
-                          <li class="list-group-item">
-                            <button type="button" class="btn btn-success">Xác nhận giao hàng </button>
-                          </li>
-                        </ul>
-                      </div> 
-                    </div>
-                  </div>
-                </div>
+﻿﻿@{
+    var hoaDons = ViewBag.HoaDons as List<FoodOrder.Models.Order.OrderModel>;
+    var orderDetails = ViewBag.OrderDetails as List<FoodOrder.Models.Order.OrderDetail>;
+    double tongtien = 0;
+}
+<main>
+    <div class="container">
+        <div class="accordion" id="accordionExample">
+            @for (int i = 0; i < hoaDons.Count; i++)
+            {
+                var hoadon = hoaDons[i];
+                var details = orderDetails.Where(od => od.OrderCode == hoadon.OrderCode).ToList();
+                
+
                 <div class="accordion-item">
                     <h2 class="accordion-header">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Nơi nhận hàng : Hòa Phước - Hòa Vang - Đà Nẵng
-                      </button>
+                        <button class="accordion-button @(i != 0 ? "collapsed" : "")" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@i" aria-expanded="@(i == 0 ? "true" : "false")" aria-controls="collapse@i">
+                            Nơi nhận hàng : @hoadon.Address
+                        </button>
                     </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample" style="">
-                      <div class="accordion-body">
-                        <!-- <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow. -->
-                        <div class="card" style="width: 50rem;">
-                          <div class="card-header">
-                            Tên người nhận : Lê Hoàng Anh Tài
-                          </div>
-                          <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                              <a class="sdt" href="">Số điện thoại : 0763058366</a>
-                            </li>
-                            <li class="list-group-item">Chi tiết địa chỉ : Tổ 3 - Thôn Tân Hạnh - Hòa Phước Hòa vang - Đà Nẵng</li>
-                            <li class="list-group-item">Ghi chú : Helooooooooo</li>
-                            <li class="list-group-item">Mã đơn hàng : 5235</li>
-                            <li class="list-group-item">
-                              <button type="button" class="btn btn-success">Xác nhận giao hàng </button>
-                            </li>
-                          </ul>
-                        </div> 
-                      </div>
+                    <div id="collapse@i" class="accordion-collapse collapse @(i == 0 ? "show" : "")" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="card" style="width: 50rem;">
+                                <div class="card-header">
+                                    Tên người nhận : @hoadon.UserName
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Mã đơn hàng : @hoadon.Id</li>
+                                    <li class="list-group-item">
+                                        <a class="sdt" href="">Số điện thoại : @hoadon.Phone</a>
+                                    </li>
+                                    <li class="list-group-item">Ngày đặt : @hoadon.Delivery_Date</li>
+                                    <li class="list-group-item">Thanh toán: @(hoadon.Status == 1 ? "chưa thanh toán" : "đã thanh toán")</li>
+
+
+                                    <li class="list-group-item">Ghi chú : </li>
+                                   
+                                </ul>
+                                <div class="container mt-5">
+                                    <h2 class="mb-4">Chi tiết đơn hàng</h2>
+                                    <table class="table table-bordered">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th scope="col">Món ăn</th>
+                                                <th scope="col">Số lượng</th>
+                                                <th scope="col">Đơn giá</th>
+                                                <th scope="col">Thành tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in details)
+                                            {
+                                                var total = item.Quantity_Sold * item.Sold; 
+                                                 tongtien += total; 
+
+                                                <tr>
+                                                    <td>@item.Food.Title</td>
+                                                    <td>@item.Quantity_Sold</td>
+                                                    <td>@item.Sold</td>
+                                                    <td>@total.ToString("#,###0")</td>
+                                                   
+                                                </tr>
+                                                <tr class="text-center">
+                                                    <td colspan="6">@tongtien.ToString("#,###0")</td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                    </table>
+                             
+                                    @if (hoadon.Delivery_Status == 0)
+                                    {
+                                        <div class="list-group-item text-end">
+                                            <form asp-controller="Home" asp-action="Orderprocess">
+                                                <input type="hidden" name="ordercode" value="@hoadon.OrderCode" />
+                                                <button type="submit" class="btn btn-success">Xác nhận giao hàng</button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="list-group-item text-end">
+                                            <span class="text-success">Đơn hàng đã giao</span>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>      
-              </div>
+                </div>
+            }
         </div>
-    </main>
+    </div>
+</main>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

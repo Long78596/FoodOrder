@@ -1,4 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
+﻿
 using FoodOrder.Areas.Shipper.Models;
 using FoodOrder.Areas.Shipper.Services;
 using FoodOrder.Data;
@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Identity;
+using FoodOrder.Areas.Admin.Repository;
 
 namespace FoodOrder.Areas.Shipper.Controllers
 {
@@ -17,10 +20,12 @@ namespace FoodOrder.Areas.Shipper.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly INotyfService _notyfService;
-        public AccountController(DataContext dataContext, INotyfService notyfService)
+        private readonly IEmailSendercs _emailSendercs;
+        public AccountController(DataContext dataContext, INotyfService notyfService,IEmailSendercs emailSendercs)
         {
             _dataContext = dataContext;
             _notyfService = notyfService;
+            _emailSendercs = emailSendercs;
         }
         [HttpGet]
         public IActionResult Register()
@@ -164,6 +169,150 @@ namespace FoodOrder.Areas.Shipper.Controllers
             }
 
             return PartialView(login);
+        }
+        
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.SignOutAsync();
+            HttpContext.Session.Remove("Id");
+            _notyfService.Error("Bạn đã đăng xuất");
+            return RedirectToAction("Login", "Account");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            
+            var taikhoanId = HttpContext.Session.GetString("Id");
+            if (taikhoanId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (!int.TryParse(taikhoanId, out int userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _dataContext.Shippers.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return View(user);
+
+           
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateInfoAccount( ShipperModel model)
+        {
+            var userById = HttpContext.Session.GetString("Id");
+            if (!int.TryParse(userById, out int userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var user = await _dataContext.Shippers.FirstOrDefaultAsync(u =>u.Id==userId);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                user.UserName = model.UserName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.Password = model.Password.Trim().ToMD5(); 
+                user.Email = model.Email;
+
+                _dataContext.Shippers.Update(user);
+                await _dataContext.SaveChangesAsync();
+                _notyfService.Success("Cập nhật thông tin thành công!");
+
+                return Redirect(Request.Headers["Referer"]);
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> NewPass(string email, string token)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+            {
+                _notyfService.Error("Thiếu email hoặc token.");
+                return RedirectToAction("ForgetPass", "Account");
+            }
+            var checkuser = await _dataContext.Shippers
+                .Where(u => u.Email == email && u.Token == token)
+                .FirstOrDefaultAsync();
+            Console.WriteLine(checkuser);
+
+            if (checkuser != null)
+            {
+                ViewBag.Email = checkuser.Email;
+                ViewBag.Token = token;  
+            }
+            else
+            {
+                _notyfService.Error("Email không tồn tại hoặc token không đúng");
+                return RedirectToAction("ForgetPass", "Account");
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> ForgetPass(string returnUrl)
+        {
+            return PartialView();
+        }
+        [HttpPost]
+        public async Task<IActionResult> SendMailForgetPass(ShipperModel user)
+        {
+            var checkMail = await _dataContext.Shippers.FirstOrDefaultAsync(x => x.Email == user.Email);
+            if (checkMail == null)
+            {
+                _notyfService.Error("Email ko tồn tại");
+                return RedirectToAction("ForgetPass", "Account");
+            }
+            else
+            {
+                string token = Guid.NewGuid().ToString();
+
+                checkMail.Token = token;
+                _dataContext.Update(checkMail);
+                await _dataContext.SaveChangesAsync();
+                var recevier = checkMail.Email;
+                var subject = "Change password for user " + checkMail.Email;
+                var message = "Click on link to change password" + " <a href='" + $"{Request.Scheme}://{Request.Host}/Account/NewPass?email=" + checkMail.Email + "&token=" + token + " ' ></a>";
+
+                await _emailSendercs.SendEmailAsync(recevier, subject, message);
+
+            }
+            _notyfService.Success("An email has been sent to your registered email address with password reset instruction");
+            return RedirectToAction("ForgetPass", "Account");
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateNewPass(ShipperModel user, string token)
+        {
+            var checkuser = await _dataContext.Shippers.Where(u => u.Email == user.Email).Where(u => u.Token == user.Token).FirstOrDefaultAsync();
+            if (checkuser != null)
+            {
+                string newtoken = Guid.NewGuid().ToString();
+
+                var passwordHasher = new PasswordHasher<ShipperModel>();
+                var passwordHash = passwordHasher.HashPassword(checkuser, user.Password);
+                checkuser.Password= passwordHash;
+
+                checkuser.Token = newtoken;
+
+                await _dataContext.SaveChangesAsync();
+                _notyfService.Success("Cập nhật mật khẩu thành công");
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                _notyfService.Error("Email ko tồn tại hoặc token ko tồn tại ");
+                return RedirectToAction("ForgetPass", "Account");
+            }
         }
 
     }

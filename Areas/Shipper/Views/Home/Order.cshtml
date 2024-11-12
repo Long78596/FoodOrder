@@ -1,0 +1,50 @@
+﻿﻿@{
+    var hoaDons = ViewBag.HoaDons as List<FoodOrder.Models.Order.OrderModel>;
+    var orderDetails = ViewBag.OrderDetails as List<FoodOrder.Models.Order.OrderDetail>;
+    double tongtien = 0;
+}
+<main>
+    <div class="container">
+        <div class="accordion" id="accordionExample">
+            @for (int i = 0; i < hoaDons.Count; i++)
+            {
+                var hoadon = hoaDons[i];
+                var details = orderDetails.Where(od => od.OrderCode == hoadon.OrderCode).ToList();
+
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button @(i != 0 ? "collapsed" : "")" type="button" data-bs-toggle="collapse" data-bs-target="#collapse@i" aria-expanded="@(i == 0 ? "true" : "false")" aria-controls="collapse@i">
+                            Mã hóa đơn:@hoadon.Id
+                        </button>
+                    </h2>
+                    <div id="collapse@i" class="accordion-collapse collapse @(i == 0 ? "show" : "")" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="card" style="width: 50rem;">
+                                <div class="card-header">
+                                    Tên người nhận : @hoadon.UserName
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <a class="sdt" href="">Số điện thoại : @hoadon.Phone</a>
+                                    </li>
+                                    <li class="list-group-item">Ngày giao : @hoadon.Delivery_Date</li>
+                                    <li class="list-group-item">Thanh toán: @(hoadon.Status == 0 ? "chưa thanh toán" : "đã thanh toán")</li>
+
+
+
+                                </ul>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
