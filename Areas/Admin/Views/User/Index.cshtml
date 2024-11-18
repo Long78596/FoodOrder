@@ -1,10 +1,12 @@
-﻿@{
+﻿@model IEnumerable<FoodOrder.Models.ViewModels.UserWithRoleViewModel>
+
+@{
     ViewData["Title"] = "Uer Listed";
 }
 <h3>
-    List Users
+    Danh sách tài khoản
 </h3>
-<a asp-action="Create" asp-controller="User">Add User</a>
+<a asp-action="Create" asp-controller="User">Thêm mới tài khoản</a>
 <table class="table">
     <thead>
         <tr>
@@ -31,8 +33,8 @@
                 <td>@userWithRoles.RoleName</td>
 
                 <td>
-                    <a asp-action="Edit" asp-controller="User" asp-route-Id="@userWithRoles.User.Id" class="btn btn-warning">Edit </a>
-                    <a asp-action="Delete" asp-controller="User" asp-route-Id="@userWithRoles.User.Id" class="btn btn-danger confirmDeletion">Delete </a>
+                    <a asp-action="Edit" asp-controller="User" asp-route-Id="@userWithRoles.User.Id" class="btn btn-warning">sửa </a>
+                    <a asp-action="Delete" asp-controller="User" asp-route-Id="@userWithRoles.User.Id" class="btn btn-danger confirmDeletion">Xóa</a>
                 </td>
             </tr>
 

@@ -1,4 +1,4 @@
-﻿﻿@{
+﻿@{
     var hoaDons = ViewBag.HoaDons as List<FoodOrder.Models.Order.OrderModel>;
     var orderDetails = ViewBag.OrderDetails as List<FoodOrder.Models.Order.OrderDetail>;
     double tongtien = 0;
@@ -10,7 +10,7 @@
             {
                 var hoadon = hoaDons[i];
                 var details = orderDetails.Where(od => od.OrderCode == hoadon.OrderCode).ToList();
-                
+
 
                 <div class="accordion-item">
                     <h2 class="accordion-header">
@@ -34,7 +34,7 @@
 
 
                                     <li class="list-group-item">Ghi chú : </li>
-                                   
+
                                 </ul>
                                 <div class="container mt-5">
                                     <h2 class="mb-4">Chi tiết đơn hàng</h2>
@@ -50,39 +50,58 @@
                                         <tbody>
                                             @foreach (var item in details)
                                             {
-                                                var total = item.Quantity_Sold * item.Sold; 
-                                                 tongtien += total; 
+                                                var total = item.Quantity_Sold * item.Sold;
+                                                tongtien += total;
 
                                                 <tr>
                                                     <td>@item.Food.Title</td>
                                                     <td>@item.Quantity_Sold</td>
                                                     <td>@item.Sold</td>
-                                                    <td>@total.ToString("#,###0")</td>
-                                                   
-                                                </tr>
-                                                <tr class="text-center">
-                                                    <td colspan="6">@tongtien.ToString("#,###0")</td>
+                                                    <td>@total.ToString("#,##0 VND")</td>
+
                                                 </tr>
                                             }
-
+                                            <tr class="text-center">
+                                                <td colspan="6">@tongtien.ToString("#,##0 VND")</td>
+                                            </tr>
                                         </tbody>
                                     </table>
-                             
+
                                     @if (hoadon.Delivery_Status == 0)
                                     {
                                         <div class="list-group-item text-end">
                                             <form asp-controller="Home" asp-action="Orderprocess">
                                                 <input type="hidden" name="ordercode" value="@hoadon.OrderCode" />
-                                                <button type="submit" class="btn btn-success">Xác nhận giao hàng</button>
+                                                <button type="submit" class="btn btn-success">Nhận đơn giao hàng</button>
                                             </form>
                                         </div>
                                     }
-                                    else
+                                    else if (hoadon.Delivery_Status == 1)
+                                    {
+                                        <div class="list-group-item text-end">
+                                            <form asp-controller="Home" asp-action="ConfirmDelivery">
+                                                <input type="hidden" name="ordercode" value="@hoadon.OrderCode" />
+                                                <button type="submit" class="btn btn-primary">Xác nhận giao hàng</button>
+                                            </form>
+                                            <form asp-controller="Home" asp-action="CancelOrder">
+                                                <input type="hidden" name="ordercode" value="@hoadon.OrderCode" />
+                                                <button type="submit" class="btn btn-danger">Hủy đơn</button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else if (hoadon.Delivery_Status == 2)
                                     {
                                         <div class="list-group-item text-end">
                                             <span class="text-success">Đơn hàng đã giao</span>
                                         </div>
                                     }
+                                    else
+                                    {
+                                        <div class="list-group-item text-end">
+                                            <span class="text-danger">Đơn hàng đã bị hủy</span>
+                                        </div>
+                                    }
+
                                 </div>
                             </div>
                         </div>

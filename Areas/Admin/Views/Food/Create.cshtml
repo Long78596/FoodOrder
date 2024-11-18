@@ -19,7 +19,9 @@
                         </div>
                         <div class="form-group mt-2">
                             <label class="form-label"> Đơn Gía</label>
-                            <input asp-for="Price" class="form-control" type="number" />
+                            <input asp-for="Price" type="number" pattern="[0-9.,]" class="form-control typing-price" />
+                            <span id="price-convert">
+                            </span>
                             <span asp-validation-for="Price" class="text-danger" />
                         </div>
                         <div class="form-group mt-2">
@@ -29,7 +31,9 @@
                         </div>
                         <div class="form-group mt-2">
                             <label class="form-label">Gía vốn ban đầu</label>
-                            <input asp-for="CapitalPrice" class="form-control" />
+                            <input asp-for="CapitalPrice" type="number" pattern="[0-9.,]" class="form-control typing-price" />
+                            <span id="price-convert">
+                            </span>
                             <span asp-validation-for="CapitalPrice" class="text-danger" />
                         </div>
                         <div class="form-group mt-2">
@@ -64,8 +68,9 @@
                         </div>
                         <div class="form-group mt-2">
                             <label class="form-label">Hình ảnh</label>
-                            <input asp-for="ImageUpload" class="form-control" />
-                            <span asp-validation-for="ImageUpload" class="text-danger" />
+                            <input asp-for="ImageUpload" type="file" class="form-control-file" />
+                            <span asp-validation-for="ImageUpload" class="text-danger"></span>
+                            <img id="imgpreview" class="pt-2" />
                         </div>
                         <div class="form-group mt-2">
                             <label class="form-label">Trạng thái</label>
@@ -96,4 +101,28 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(".typing-price").on("keyup", function () {
+            var currency_input = parseFloat($(this).val()) || 0;
+            $("#price-convert").html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(currency_input));
+        });
+    </script>
+    <script>
+        $("#ImageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("img#imgpreview").attr("src", e.target.result).width(200).height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 }

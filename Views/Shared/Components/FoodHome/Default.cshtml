@@ -5,6 +5,6 @@
         <span>@Model.Category.Title</span>
         <h2>@Model.Title <br /> @Model.Price</h2>
         <p>Miễn phí free ship</p>
-        <a href="#" class="primary-btn">Đặt ngay</a>
+        <a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@Model.Id" class="primary-btn">Đặt ngay</a>
     </div>
 </div>

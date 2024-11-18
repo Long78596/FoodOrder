@@ -1,6 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FoodOrder.Data;
-using FoodOrder.Migrations;
 using FoodOrder.Models;
 using FoodOrder.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -35,13 +34,14 @@ namespace FoodOrder.Controllers
             return View(foods);
         }
 
-        public async Task<IActionResult> Shop(string sort_by = "", string startprice = "", string endprice = "")
+        public async Task<IActionResult> Shop(string sort_by = "", string startprice = "", string endprice = "", int pg = 1)
         {
+            int pageSize = 8;  
             var productByCategory = await _dataContext.Foods.Include(d => d.Category).ToListAsync();
 
+           
             if (productByCategory.Any())
             {
-                // Sắp xếp sản phẩm theo yêu cầu
                 if (sort_by == "price_increase")
                 {
                     productByCategory = productByCategory.OrderBy(d => d.Price).ToList();
@@ -59,7 +59,7 @@ namespace FoodOrder.Controllers
                     productByCategory = productByCategory.OrderBy(d => d.Id).ToList();
                 }
 
-                // Lọc theo khoảng giá
+                // Apply price range filter
                 if (!string.IsNullOrEmpty(startprice) && !string.IsNullOrEmpty(endprice))
                 {
                     if (double.TryParse(startprice, out double startPriceValue) && double.TryParse(endprice, out double endPriceValue))
@@ -74,12 +74,22 @@ namespace FoodOrder.Controllers
                     productByCategory = productByCategory.OrderByDescending(p => p.Id).ToList();
                 }
             }
-            var foodnew = _dataContext.Foods.Where(x => x.Status == true).Include(d => d.Category).Skip(3).Take(3).ToList();
-            var Topfood = _dataContext.Foods.Where(x => x.Status == true).Include(d => d.Category).Skip(6).Take(3).ToList();
-            ViewBag.foodnew = foodnew;
-            ViewBag.Topfood = Topfood;
-            return View(productByCategory);
+
+            // Pagination
+            var totalItems = productByCategory.Count();
+            var products = productByCategory.Skip((pg - 1) * pageSize).Take(pageSize).ToList();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            ViewBag.CurrentPage = pg;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.SortBy = sort_by;
+            ViewBag.StartPrice = startprice;
+            ViewBag.EndPrice = endprice;
+
+            return View(products);
         }
+
+
 
 
         //public IActionResult Shop(int pg = 1)
@@ -162,7 +172,7 @@ namespace FoodOrder.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        
         public async Task<IActionResult> CommentFood(RatingModel rating)
         {
             // Danh sách các từ nhạy cảm
@@ -183,8 +193,7 @@ namespace FoodOrder.Controllers
                 return Redirect(Request.Headers["Referer"]);
             }
 
-            if (ModelState.IsValid)
-            {
+            
                 var ratingEntity = new RatingModel
                 {
                     FoodId = rating.FoodId,
@@ -196,11 +205,8 @@ namespace FoodOrder.Controllers
                 await _dataContext.SaveChangesAsync();
                 _notyfService.Success("Thêm đánh giá thành công");
                 return Redirect(Request.Headers["Referer"]);
-            }
-            else
-            {
-                return RedirectToAction("Detail", new { id = rating.FoodId });
-            }
+            
+            
         }
 
 

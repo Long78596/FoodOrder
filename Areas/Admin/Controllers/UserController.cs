@@ -1,6 +1,7 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using FoodOrder.Data;
 using FoodOrder.Models;
+using FoodOrder.Models.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -34,18 +35,18 @@ namespace FoodOrder.Areas.Admin.Controllers
         {
             var userWithRoles = await (from u in _context.Users
                                        join ur in _context.UserRoles on u.Id equals ur.UserId into userRoles
-                                       from ur in userRoles.DefaultIfEmpty() 
+                                       from ur in userRoles.DefaultIfEmpty()
                                        join r in _context.Roles on ur.RoleId equals r.Id into roles
-                                       from r in roles.DefaultIfEmpty() 
-                                       select new
+                                       from r in roles.DefaultIfEmpty()
+                                       select new UserWithRoleViewModel
                                        {
                                            User = u,
-                                           RoleName = r != null ? r.Name : "No Role" 
+                                           RoleName = r != null ? r.Name : "No Role"
                                        }).ToListAsync();
 
             return View(userWithRoles);
-
         }
+
         [HttpGet]
         [Route("Create")]
         public async Task<IActionResult> Create()

@@ -1,0 +1,90 @@
+﻿@model FoodModel
+<main>
+    <div class="container-fluid px-4">
+        <h3 class="mt-4">Danh sách món ăn</h3>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Dashboard">Trang quản trị</a></li>
+            <li class="breadcrumb-item active">Tables</li>
+        </ol>
+
+        <div class="card mb-4">
+
+            <div class="card-body">
+                <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns">
+                    
+
+                    <div class="datatable-container">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="text-center ">#</th>
+                                    <th class="text-center ">Thông tin món ăn</th>
+                                    <th class="text-center ">Thông tin chi tiết</th>
+                                    <th class="text-center ">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center align-middle">@Model.Id</td>
+                                    <td class="text-center align-middle">
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <th class="text-center align-middle">Tên món ăn</th>
+                                                <td class="text-center align-middle">@Model.Title</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center align-middle">Hinh ảnh</th>
+                                                <td class="text-center align-middle"><img src="~/image/food/@Model.Image" style="height:100px;" /></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center align-middle">Số lượng còn </th>
+                                                <td class="text-center align-middle">@Model.Quantity</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center align-middle">Đơn giá</th>
+                                                <td class="text-center align-middle">@Model.Price</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <table class="table table-bordered">
+                                            <tr>
+                                                <th class="text-center align-middle">Địa chỉ quán</th>
+                                                <td class="text-center align-middle">@Model.Address</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center align-middle">số lượng bán được</th>
+                                               <td class="text-center align-middle">@Model.Sold</td
+     
+    </td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center align-middle">Ngày tạo</th>
+                                                <td class="text-center align-middle">@Model.Created.ToString()</td>
+                                            </tr>
+                                            
+                                        </table>
+                                    </td>
+                                       @if (Model.Status == true)
+                                        {
+                                            <td class="text-center align-middle">
+                                                <p class="text-primary">Hiển thị</p>
+                                            </td class="text-center">
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center align-middle">
+                                                <p class="text-warning"> Không Hiển thị</p>
+                                            </td>
+                                        }
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+  

@@ -1,0 +1,35 @@
+﻿<div class="latest-product__slider__item">
+    @if (ViewBag.foodnew != null)
+    {
+        @foreach (var food in ViewBag.foodnew as List<FoodModel>)
+        {
+            <a asp-action="Detail" asp-controller="Home" asp-route-Id="@food.Id" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                    <img src="~/image/food/@food.Image" style="width:100px;" alt="@food.Title">
+                </div>
+                <div class="latest-product__item__text">
+                    <h6>@food.Title</h6>
+                    <span>@food.Price.ToString("##,###")</span>
+                </div>
+            </a>
+        }
+    }
+</div>
+
+<div class="latest-product__slider__item">
+    @if (ViewBag.Topfood != null)
+    {
+        @foreach (var food in ViewBag.Topfood as List<FoodModel>)
+        {
+            <a asp-action="Detail" asp-controller="Home" asp-route-Id="@food.Id" class="latest-product__item">
+                <div class="latest-product__item__pic">
+                    <img src="~/image/food/@food.Image" style="width:100px;" alt="@food.Title">
+                </div>
+                <div class="latest-product__item__text">
+                    <h6>@food.Title</h6>
+                    <span>@food.Price.ToString("##,###")</span>
+                </div>
+            </a>
+        }
+    }
+</div>

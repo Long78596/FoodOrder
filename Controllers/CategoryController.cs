@@ -12,56 +12,95 @@ namespace FoodOrder.Controllers
         {
             _dataContext = dataContext;
         }
-        public async Task<IActionResult> Index(string Slug = "", string sort_by= "",string startprice= "",string endprice= "")
-        {
-            CategoryModel category = _dataContext.Categories.Where(c => c.Slug == Slug).FirstOrDefault();
-            
-            
-            if (category == null) return RedirectToAction("Index");
-            IQueryable<FoodModel> productByCategory = _dataContext.Foods.Where(d => d.CategoryId == category.Id);
 
-            var count = await productByCategory.CountAsync();
-           if(count > 0)
+        public async Task<IActionResult> Index(string Slug = "", string sort_by = "", string startprice = "", string endprice = "", int pg = 1, int pageSize = 8)
+        {
+            
+            CategoryModel category = await _dataContext.Categories
+                .Where(c => c.Slug == Slug)
+                .FirstOrDefaultAsync();
+
+           
+            if (category == null)
             {
-                if(sort_by== "price_increase")
+                return RedirectToAction("Index");
+            }
+
+            // Lọc sản phẩm theo category
+            IQueryable<FoodModel> productsByCategory = _dataContext.Foods
+                .Where(d => d.CategoryId == category.Id);
+
+            // Đếm tổng số sản phẩm theo category
+            var count = await productsByCategory.CountAsync();
+
+            // Nếu có sản phẩm
+            if (count > 0)
+            {
+                // Sắp xếp sản phẩm theo giá trị sort_by
+                if (sort_by == "price_increase")
                 {
-                    productByCategory = productByCategory.OrderBy(d => d.Price);
-                }else if (sort_by== "price_decrease")
+                    productsByCategory = productsByCategory.OrderBy(d => d.Price);
+                }
+                else if (sort_by == "price_decrease")
                 {
-                    productByCategory = productByCategory.OrderByDescending(d => d.Price);
+                    productsByCategory = productsByCategory.OrderByDescending(d => d.Price);
                 }
                 else if (sort_by == "price_newest")
                 {
-                    productByCategory = productByCategory.OrderByDescending(d => d.Id);
+                    productsByCategory = productsByCategory.OrderByDescending(d => d.Id);
                 }
                 else if (sort_by == "price_oldest")
                 {
-                    productByCategory = productByCategory.OrderBy(d => d.Id);
+                    productsByCategory = productsByCategory.OrderBy(d => d.Id);
                 }
-                //lọc giá
 
-                else if (startprice != "" && endprice != "")
+                // Lọc theo giá nếu startprice và endprice được truyền vào
+                if (!string.IsNullOrEmpty(startprice) && !string.IsNullOrEmpty(endprice))
                 {
-                    double startPriceValue;
-                    double endPriceValue;
-                    if(double.TryParse(startprice, out startPriceValue) && double.TryParse(endprice, out endPriceValue))
+                    if (double.TryParse(startprice, out double startPriceValue) && double.TryParse(endprice, out double endPriceValue))
                     {
-                        productByCategory = productByCategory.Where(p => p.Price >= startPriceValue && p.Price<= endPriceValue);
-
-                    }
-                    else
-                    {
-                        productByCategory = productByCategory.OrderByDescending(p => p.Id);
+                        productsByCategory = productsByCategory
+                            .Where(p => p.Price >= startPriceValue && p.Price <= endPriceValue);
                     }
                 }
-                else
-                {
-                    productByCategory = productByCategory.OrderByDescending(p => p.Id);
-                }
+
+                int totalItems = await productsByCategory.CountAsync();
+                int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+                // Gán giá trị cho ViewBag khi có sản phẩm
+                ViewBag.PageNumber = pg;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.Slug = Slug ?? "";  // Gán giá trị mặc định cho Slug nếu null
+                ViewBag.SortBy = sort_by ?? "";  // Gán giá trị mặc định cho sort_by nếu null
+                ViewBag.StartPrice = startprice ?? "";  // Gán giá trị mặc định cho startprice nếu null
+                ViewBag.EndPrice = endprice ?? "";  // Gán giá trị mặc định cho endprice nếu null
+
+                productsByCategory = productsByCategory
+                    .Skip((pg - 1) * pageSize)  
+                    .Take(pageSize);            
+
+                return View(await productsByCategory.ToListAsync());
             }
-            
-            
-            return View(await productByCategory.ToListAsync());
+            else
+            {
+               
+                ViewBag.PageNumber = null;
+                ViewBag.TotalPages = null;
+                ViewBag.Slug = null;
+                ViewBag.SortBy = null;
+                ViewBag.StartPrice = null;
+                ViewBag.EndPrice = null;
+
+                
+                return View(new List<FoodModel>());
+            }
         }
+
+
+
+
+
+
+
     }
 }

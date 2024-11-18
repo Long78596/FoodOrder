@@ -2,6 +2,7 @@
 using FoodOrder.Areas.Admin.Repository;
 using FoodOrder.Data;
 using FoodOrder.Models;
+using FoodOrder.Services.VnPay;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
@@ -16,8 +17,9 @@ namespace FoodOrder
         {
             var builder = WebApplication.CreateBuilder(args);
 
-           
 
+
+            var builderRazer = builder.Services.AddRazorPages();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             // Configure DbContext
@@ -85,7 +87,7 @@ namespace FoodOrder
 
             builder.Services.AddAuthentication().AddFacebook(opt =>
  {
-   
+    
  });
 
 
@@ -106,17 +108,23 @@ namespace FoodOrder
                 options.AddPolicy("ShipperPolicy", policy =>
                     policy.RequireClaim("Role", "Shipper")); ;
             });
-
+            //Connect VNPay API
+            builder.Services.AddScoped<IVnPayServices, VnPayServices>();
 
             var app = builder.Build();
             app.UseStatusCodePagesWithRedirects("/Home/Error?statuscode={0}");
 
             // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                builderRazer.AddRazorRuntimeCompilation();
+            }
+            else
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
             }
 
             app.UseHttpsRedirection();

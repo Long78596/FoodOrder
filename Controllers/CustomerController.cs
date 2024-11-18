@@ -27,7 +27,7 @@ namespace FoodOrder.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var userEmail = User.FindFirstValue(ClaimTypes.Email);
+            var userName = User.FindFirstValue(ClaimTypes.Name);
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {

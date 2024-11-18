@@ -157,16 +157,14 @@ namespace FoodOrder.Areas.Admin.Controllers
             _notyfService.Success("Xóa món ăn thành công!");
             return RedirectToAction("Index");
         }
-       
+
         [HttpGet]
-        public IActionResult Loc(int CateId = 0)
+        public async Task<IActionResult> View(int Id)
         {
-            var url = $"/Admin/MonAn?CateID={CateId}";
-            if (CateId == 0)
-            {
-                url = $"/Admin/MonAn";
-            }
-            return Json(new { status = "success", redirectUrl = url });
+            FoodModel monAn = await _dataContext.Foods.FindAsync(Id);
+            ViewBag.Category = new SelectList(_dataContext.Categories, "Id", "Title");
+            return View(monAn);
+
         }
     }
 }

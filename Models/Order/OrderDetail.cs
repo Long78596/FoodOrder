@@ -16,7 +16,7 @@ namespace FoodOrder.Models.Order
 
         public int Quantity_Sold { get; set; }  
 
-        public int OrderId { get; set; }
+        public string OrderId { get; set; }
         [ForeignKey("OrderId")]
         
 

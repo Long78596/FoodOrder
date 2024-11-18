@@ -99,7 +99,7 @@ namespace FoodOrder.Areas.Admin.Controllers
             }
        
         }
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(string Id)
         {
             var orderDetails = await _context.OrderDetails
                                     .Include(od => od.Order)

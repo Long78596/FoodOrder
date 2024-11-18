@@ -21,19 +21,23 @@ namespace FoodOrder.Areas.Shipper.Controllers
         }
         public IActionResult Index()
         {
-            var hoaDons = _dataContext.Orders.Where(d=>d.Delivery_Status == 0).OrderByDescending(h => h.CreateDate).ToList();
+            var hoaDons = _dataContext.Orders
+                                      
+                                      .OrderByDescending(h => h.CreateDate)
+                                      .ToList();
 
             var orderDetails = _dataContext.OrderDetails
-                                .Include(c=>c.Food)
-                                .Include(ct => ct.Order)
-                                .Where(ct => hoaDons.Select(h => h.OrderCode).Contains(ct.OrderCode))
-                                .ToList();
+                                           .Include(c => c.Food)
+                                           .Include(ct => ct.Order)
+                                           .Where(ct => hoaDons.Select(h => h.OrderCode).Contains(ct.OrderCode))
+                                           .ToList();
 
             ViewBag.HoaDons = hoaDons;
             ViewBag.OrderDetails = orderDetails;
 
             return View();
         }
+        
         [HttpPost]
         public IActionResult Orderprocess(string ordercode)
         {
@@ -55,6 +59,36 @@ namespace FoodOrder.Areas.Shipper.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [HttpPost]
+        public IActionResult ConfirmDelivery(string ordercode)
+        {
+            
+            var order = _dataContext.Orders.FirstOrDefault(o => o.OrderCode == ordercode);
+            if (order != null)
+            {
+                order.Delivery_Status = 2;
+                _dataContext.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        
+    }
+
+        [HttpPost]
+        public IActionResult CancelOrder(string ordercode)
+        {
+            var order = _dataContext.Orders.FirstOrDefault(o => o.OrderCode == ordercode);
+            if (order != null)
+            {
+                order.Delivery_Status = 3;
+                _dataContext.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Order()
         {
             var hoaDons = _dataContext.Orders.Where(d => d.Delivery_Status == 1).OrderByDescending(h => h.CreateDate).ToList();

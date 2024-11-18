@@ -22,7 +22,8 @@ namespace FoodOrder.Data
         public DbSet<ShipperModel>  Shippers { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<StatisticalModel> Statisticals { get; set; }
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<VnPayModel> Payments { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 

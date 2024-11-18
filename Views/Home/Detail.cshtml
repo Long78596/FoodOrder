@@ -122,7 +122,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                               aria-selected="false">Reviews <span>(1)</span></a>
+                               aria-selected="false">Bình luận <span>(@ViewBag.Comments.Count)</span></a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -215,21 +215,21 @@
                         <input type="hidden" asp-for="@Model.Foods.Id" name="FoodId" />
                         <div class="mb-3">
                             <span asp-validation-for="@Model.Name" class="text-danger"> </span>
-                            <input type="text" asp-for="@Model.Name"  class="form-control" placeholder="Your Name" required>
+                            <input type="text" asp-for="@Model.Name"  class="form-control" placeholder="nhập tên" required>
                         </div>
                         <div class="mb-3">
                         <input type="hidden" name="Star" value="4" />
                         </div>
                          
                         <div class="mb-3">
-                            <textarea asp-for="@Model.Comment" class="form-control" rows="5" placeholder="Your Comment" required></textarea>
+                            <textarea asp-for="@Model.Comment" class="form-control" rows="5" placeholder="nội dung bình luận" required></textarea>
                             <span class="text-danger" asp-validation-for="@Model.Comment"></span>
                         </div>
-                        <button type="submit" class="btn site-btn">Submit</button>
+                        <button type="submit" class="btn site-btn">Gửi</button>
                     </form>
                 </div>
                 <div class="comments-list">
-                    <h4 class="mb-4">Comments</h4>
+                    <h4 class="mb-4">Bình luận</h4>
                     @if (ViewBag.Comments != null)
                     {
                         @foreach (var comment in ViewBag.Comments)

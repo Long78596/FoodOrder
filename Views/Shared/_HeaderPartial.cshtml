@@ -46,21 +46,22 @@
                 <nav class="header__menu">
                     <ul>
                         <li class="active"><a  asp-action="Index" asp-controller="Home">Home</a></li>
-                        <li><a  asp-action="Shop" asp-controller="Home">Shop</a></li>
-                        <li><a href="./blog.html">Blog</a></li>
-                        <li><a href="./contact.html">Contact</a></li>
+                        <li><a  asp-action="Shop" asp-controller="Home">Tất cả món ăn</a></li>
                         @if (User.Identity?.IsAuthenticated ?? false)
                         {
-
-                            <li><a asp-action="Checkout" asp-controller="Cart">Thanh toán</a></li>
-                            <li><a asp-action="Index" asp-controller="Customer">Quản lý thông tin cá nhân</a></li>
-                            <li><a >Hi,@User.Identity.Name</a></li>
-                            <li><a asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
+                        <li>
+                            <a href="#">Thông tin</a>
+                            <ul class="header__menu__dropdown">
+                                <li><a asp-action="Checkout" asp-controller="Cart">Thanh toán</a></li>
+                                    <li><a asp-action="Index" asp-controller="Customer"> Thông tin cá nhân</a></li>
+                                    <li><a asp-action="History" asp-controller="Account">Lịch sử đơn hàng</a></li>
+                                <li><a asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
+                            </ul>
+                        </li>
                         }
-                        else
-                        {
-                            <li><a asp-action="Login" asp-controller="Account">Login</a></li>
-                        }
+                        <li><a asp-action="Index" asp-controller="Contact">liên hệ</a></li>
+                       
+                        
                        
                     </ul>
                 </nav>
@@ -69,9 +70,21 @@
                 <div class="header__cart">
                      @if (User.Identity?.IsAuthenticated ?? false)
                         {
-                       <vc:cart></vc:cart>
+                        <vc:cart></vc:cart>
+                        <ul>
+                            <li><a  style="color:black;font-weight:bold">
+                            <li><a asp-action="Logout" asp-controller="Account">Hi,@User.Identity.Name</a></li></a></li>
+                        </ul>
+                    }
+                    else{
+                        <ul>
+                            <li><a asp-action="Login" asp-controller="Account" style="color:black;font-weight:bold">Login</a></li>
+                        </ul>
+                       
+                        
+                       
                         }
-                   
+
                 </div>
             </div>
         </div>
