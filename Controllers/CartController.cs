@@ -75,6 +75,7 @@ namespace FoodOrder.Controllers
         }
         public async Task<IActionResult> UpdateCart(int Id, int quantity)
         {
+            // Tìm sản phẩm trong cơ sở dữ liệu
             FoodModel foodItem = await _dataContext.Foods.FindAsync(Id);
             if (foodItem == null)
             {
@@ -88,28 +89,25 @@ namespace FoodOrder.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Lấy giỏ hàng từ session
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
 
             CartItemModel giohangVM = cart.FirstOrDefault(c => c.FoodId == Id);
 
             if (giohangVM != null)
             {
-                
-                giohangVM.Quantity += quantity;
+                giohangVM.Quantity = quantity;
 
-                
                 HttpContext.Session.SetJson("Cart", cart);
                 _notyfService.Success("Cập nhật giỏ hàng thành công!");
             }
             else
             {
-                
                 _notyfService.Error("Sản phẩm không có trong giỏ hàng.");
             }
 
             return RedirectToAction("Index");
         }
+
 
 
         public async Task<IActionResult> Decrease(int Id)

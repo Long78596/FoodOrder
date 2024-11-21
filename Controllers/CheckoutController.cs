@@ -75,7 +75,9 @@ namespace FoodOrder.Controllers
             {
 
                 var ordercode = Guid.NewGuid().ToString();
+                var ordercodeId = Guid.NewGuid().ToString();
                 var orderItem = new OrderModel();
+                orderItem.Id = ordercodeId;
                 orderItem.OrderCode = ordercode;
 
 
@@ -186,15 +188,15 @@ namespace FoodOrder.Controllers
                     Phone = "0905807623",
                     Address = "Đà nẵng",
                     OrderNotes = response.OrderDescription,
-                    Status = 1, // Trạng thái đơn hàng là "Đã thanh toán"
+                    Status = 1, 
                     Delivery_Date = DateTime.Now,
-                    Delivery_Status = 0, // Trạng thái giao hàng chưa hoàn tất
-                    ShipperId = 1, // Giả sử ShipperId mặc định là 1, bạn có thể sửa lại tùy theo yêu cầu
+                    Delivery_Status = 0, 
+                    ShipperId = 1, 
                     CreateDate = DateTime.Now,
 
                 };
 
-                // Lấy phí vận chuyển từ cookie nếu có
+               
                 var shippingPriceCookie = Request.Cookies["ShippingPrice"];
                 double shippingPrice = shippingPriceCookie != null ? JsonConvert.DeserializeObject<double>(shippingPriceCookie) : 0;
                 orderItem.ShippingCost = shippingPrice;

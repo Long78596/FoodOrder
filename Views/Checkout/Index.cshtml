@@ -103,23 +103,25 @@
                             </div>
 
 
-                            <form method="POST" asp-action="CreatePaymentUrlVnpay" asp-controller="Payment">
-                                <input type="hidden" name="Name" value="@User.Identity.Name" />
-                                <input type="hidden" name="Amount" value="@Model.TotalPrice" />
-                                <input type="hidden" name="OrderDescription" value="Thanh toán qua Vnpay tại HieuTanStore" />
-                                <input type="hidden" name="OrderType" value="other" />
-
-                                <input type="hidden" name="Phone" value="@Model.Phone" />
-                                <input type="hidden" name="Address" value="@Model.Address" />
-
-                                <button class="btn btn-success" type="submit">Thanh toán với VNPAY</button>
-                            </form>
+                          
                             <button type="submit" class="site-btn">Thanh toán (COD)</button>
                         </div>
                     </div>
                 </div>
 
             </form>
+            <form method="POST" asp-action="CreatePaymentUrlVnpay" asp-controller="Payment">
+                <input type="hidden" name="Name" value="@User.Identity.Name" />
+                <input type="hidden" name="Amount" value="@Model.TotalPrice" />
+                <input type="hidden" name="OrderDescription" value="Thanh toán qua Vnpay tại HieuTanStore" />
+                <input type="hidden" name="OrderType" value="other" />
+
+                <input type="hidden" name="Phone" value="@Model.Phone" />
+                <input type="hidden" name="Address" value="@Model.Address" />
+
+                <button class="btn btn-success" type="submit">Thanh toán với VNPAY</button>
+            </form>
+            
             
 
 
