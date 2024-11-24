@@ -1,90 +1,84 @@
 ﻿@model StatisticalModel
-<div class="page-wrapper">
-	<div class="page-content">
-		<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2 row-cols-xxl-4">
-			<div class="col">
-				<div class="card radius-10 bg-gradient-cosmic">
-					<div class="card-body">
-						<div class="d-flex align-items-center">
-							<div class="me-auto">
-								<p class="mb-0 text-white">Thống kê đơn hàng</p>
-								<h4 class="my-1 text-white">@ViewBag.CountOrder</h4>
-							</div>
-							<div id="chart1"></div>
-						</div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-2 row-cols-xxl-4">
+	<div class="col">
+		<div class="card radius-10 bg-gradient-cosmic">
+			<div class="card-body">
+				<div class="d-flex align-items-center">
+					<div class="me-auto">
+						<p class="mb-0 text-white">Thống kê đơn hàng</p>
+						<h4 class="my-1 text-white">@ViewBag.CountOrder đơn hàng</h4>
 					</div>
+					<div id="chart1"></div>
 				</div>
 			</div>
-			<div class="col">
-				<div class="card radius-10 bg-gradient-ibiza">
-					<div class="card-body">
-						<div class="d-flex align-items-center">
-							<div class="me-auto">
-								<p class="mb-0 text-white">Thống kê sản phẩm</p>
-								<h4 class="my-1 text-white">@ViewBag.CountFood</h4>
-							</div>
-							<div id="chart2"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card radius-10 bg-gradient-ohhappiness">
-					<div class="card-body">
-						<div class="d-flex align-items-center">
-							<div class="me-auto">
-								<p class="mb-0 text-white">Thống kê user</p>
-								<h4 class="my-1 text-white">  @ViewBag.CountUser</h4>
-							</div>
-							<div id="chart3"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col">
-				<div class="card radius-10 bg-gradient-kyoto">
-					<div class="card-body">
-						<div class="d-flex align-items-center">
-							<div class="me-auto">
-								<p class="mb-0 text-dark">Thống kê danh mục</p>
-								<h4 class="my-1 text-dark">@ViewBag.CountCategory</h4>
-							</div>
-							<div id="chart4"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!--end row-->
-
-		<div class="container">
-			<div class="row">
-				<div class="col-12 col-lg-12">
-					<h4>Lọc dữ liệu theo:</h4>
-					<select class="filter-select">
-						<option value="30">---Lọc dữ liệu---</option>
-						<option value="7">7 ngày trước</option>
-						<option value="30">tháng qua</option>
-						<option value="90">3 tháng trước</option>
-						<option value="365">1 năm</option>
-
-
-					</select>
-					
-						<h4>Tùy chọn:</h4>
-						<label>Từ ngày:</label>
-						<input type="date" class="form-control" id="date_form" asp-for="@Model.DateCreated" />
-						<label>Đến ngày:</label>
-						<input type="date" class="form-control" id="date_to" asp-for="@Model.DateCreated" />
-						<button id="filterButton" class="btn btn-success">Lọc</button>
-				
-
-					<div id="myfirstchart" style="height: 250px;"></div>
-				</div>
-			</div><!--end row-->
 		</div>
-
-		
 	</div>
+	<div class="col">
+		<div class="card radius-10 bg-gradient-ibiza">
+			<div class="card-body">
+				<div class="d-flex align-items-center">
+					<div class="me-auto">
+						<p class="mb-0 text-white">Thống kê sản phẩm</p>
+						<h4 class="my-1 text-white">@ViewBag.CountFood sản phẩm</h4>
+					</div>
+					<div id="chart2"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="card radius-10 bg-gradient-ohhappiness">
+			<div class="card-body">
+				<div class="d-flex align-items-center">
+					<div class="me-auto">
+						<p class="mb-0 text-white">Thống kê user</p>
+						<h4 class="my-1 text-white">  @ViewBag.CountUser user</h4>
+					</div>
+					<div id="chart3"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="card radius-10 bg-gradient-kyoto">
+			<div class="card-body">
+				<div class="d-flex align-items-center">
+					<div class="me-auto">
+						<p class="mb-0 text-dark">Thống kê danh mục</p>
+						<h4 class="my-1 text-dark">@ViewBag.CountCategory danh mục</h4>
+					</div>
+					<div id="chart4"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div><!--end row-->
+
+<div class="container">
+	<div class="row">
+		<div class="col-12 col-lg-12">
+			<h4>Lọc dữ liệu theo:</h4>
+			<select class="filter-select">
+				<option value="30">---Lọc dữ liệu---</option>
+				<option value="7">7 ngày trước</option>
+				<option value="30">tháng qua</option>
+				<option value="90">3 tháng trước</option>
+				<option value="365">1 năm</option>
+
+
+			</select>
+
+			<h4>Tùy chọn:</h4>
+			<label>Từ ngày:</label>
+			<input type="date" class="form-control" id="date_form" asp-for="@Model.DateCreated" />
+			<label>Đến ngày:</label>
+			<input type="date" class="form-control" id="date_to" asp-for="@Model.DateCreated" />
+			<button id="filterButton" class="btn btn-success">Lọc</button>
+
+
+			<div id="myfirstchart" style="height: 250px;"></div>
+		</div>
+	</div><!--end row-->
 </div>
 @section Scripts{
 	<script>

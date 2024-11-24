@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using FoodOrder.Models.Order;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FoodOrder.Models
 {
@@ -18,5 +20,9 @@ namespace FoodOrder.Models
         public DateTime DateStart { get; set; }
 
         public DateTime DataExpired { get; set; }
+        public string? OrderId { get; set; }
+        [ForeignKey("OrderId")]
+        public OrderModel Order { get; set; }
+
     }
 }

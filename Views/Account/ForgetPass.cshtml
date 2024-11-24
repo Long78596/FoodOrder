@@ -21,10 +21,16 @@
         <p class="lock-icon"><i class="fas fa-lock"></i></p>
         <h2>Quên mật khẩu?</h2>
         <p>Khôi phục lại mật khẩu</p>
-       <form asp-action="SendMailForgetPass" asp-controller="Account" method="post">
-            <input asp-for="Email" type="text" class="passInput" placeholder="Nhập địa chỉ Email">
-            <button type="submit"><a>Gửi</a></button>
-       </form>
+        <form asp-action="SendMailForgetPass" asp-controller="Account" method="post">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+                <input asp-for="Email" type="text" class="passInput" placeholder="Nhập địa chỉ Email" style="padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
+                <button type="submit" style="padding: 10px 20px; background-color: #00bfff; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    Gửi
+                </button>
+            </div>
+        </form>
+
+
     </div>
     <style>
         * {
@@ -62,6 +68,7 @@
             flex-direction: column;
             align-items: center;
             padding: 40px 50px;
+            justify-content:center;
         }
 
         .lock-icon {
@@ -87,6 +94,8 @@
             font-size: 15px;
             color: white;
             outline: none;
+            align-items: center;
+            justify-content: center;
         }
 
         button {
@@ -96,6 +105,8 @@
             color: white;
             padding: 10px;
             text-transform: uppercase;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 

@@ -2,10 +2,10 @@
 @{
     ViewData["title"] = " Edit user";
 }
-<div class="container">
-    <h3>Chỉnh sửa thông tin tài khoản</h3>
+<div class="container ">
+    <h3 >Chỉnh sửa thông tin tài khoản</h3>
     <div class="row">
-        <div class="col-9">
+        <div class="col-6 col-md-6">
             <form autocomplete="off" method="post" asp-action="UpdateInfoAccount" asp-controller="Customer">
                 <input type="hidden" asp-for="Id" />
 
@@ -25,25 +25,25 @@
                     </span>
                 </div>
                 <div class="form-group">
-                    <label>Phone Number</label>
+                    <label>Số điện thoại</label>
                     <input asp-for="PhoneNumber" required type="text" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger">
                     </span>
 
                 </div>
                 <div class="form-group">
-                    <label>Old Password</label>
+                    <label>Mật khẩu cũ</label>
                     <input readonly required value="@Model.PasswordHash" type="text" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label>New Password</label>
+                    <label>mật khẩu mới</label>
                     <input required type="text" name="PasswordHash" class="form-control" />
                     <span asp-validation-for="PasswordHash" class="text-danger">
                     </span>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit">
-                        Update
+                       Cập nhật
                     </button>
                 </div>
             </form>

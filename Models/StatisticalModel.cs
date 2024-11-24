@@ -1,4 +1,7 @@
-﻿namespace FoodOrder.Models
+﻿using FoodOrder.Models.Order;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FoodOrder.Models
 {
 	public class StatisticalModel
 	{
@@ -8,7 +11,8 @@
 		public int Revenue { get; set; }
 		public int Profit { get; set; }
 		public DateTime DateCreated { get; set; }
+    
 
 
-	}
+    }
 }

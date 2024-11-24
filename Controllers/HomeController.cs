@@ -36,7 +36,7 @@ namespace FoodOrder.Controllers
 
         public async Task<IActionResult> Shop(string sort_by = "", string startprice = "", string endprice = "", int pg = 1)
         {
-            int pageSize = 8;  
+            int pageSize = 6;  
             var productByCategory = await _dataContext.Foods.Include(d => d.Category).ToListAsync();
 
            
@@ -92,33 +92,7 @@ namespace FoodOrder.Controllers
 
 
 
-        //public IActionResult Shop(int pg = 1)
-        //{
-        //    List<FoodModel> category = _dataContext.Foods.ToList(); //33 datas
-
-
-        //    const int pageSize = 5; //10 items/trang
-
-        //    if (pg < 1) //page < 1;
-        //    {
-        //        pg = 1; //page ==1
-        //    }
-        //    int recsCount = category.Count(); //33 items;
-
-        //    var pager = new PaginateModel(recsCount, pg, pageSize);
-
-        //    int recSkip = (pg - 1) * pageSize; //(3 - 1) * 10; 
-
-        //    //category.Skip(20).Take(10).ToList()
-
-        //    var data = category.Skip(recSkip).Take(pager.PageSize).ToList();
-
-        //    ViewBag.Pager = pager;
-
-        //    return View(data);
-        //    //var foods = _dataContext.Foods.Include(d => d.Category).ToList();
-        //    //return View(foods);
-        //}
+        
         public async Task<IActionResult> Search(string searchtern)
         {
             if (string.IsNullOrWhiteSpace(searchtern))

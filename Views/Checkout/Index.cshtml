@@ -92,8 +92,8 @@
                             </ul>
                                 }
                             }
-                            <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                            <div class="checkout__order__total">Total <span>@Model.TotalPrice.ToString("#,##0 VND")</span></div>
+                           
+                            <div class="checkout__order__total">Tổng tiền cần thanh toán: <span>@Model.TotalPrice.ToString("#,##0 VND")</span></div>
                             <div class="checkout__input__checkbox">
                                 <label for="acc-or">
                                    lưu lịa thông tin?
@@ -110,16 +110,24 @@
                 </div>
 
             </form>
+
             <form method="POST" asp-action="CreatePaymentUrlVnpay" asp-controller="Payment">
-                <input type="hidden" name="Name" value="@User.Identity.Name" />
-                <input type="hidden" name="Amount" value="@Model.TotalPrice" />
-                <input type="hidden" name="OrderDescription" value="Thanh toán qua Vnpay tại HieuTanStore" />
-                <input type="hidden" name="OrderType" value="other" />
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        </div>
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <input type="hidden" name="Name" value="@User.Identity.Name" />
+                        <input type="hidden" name="Amount" value="@Model.TotalPrice" />
+                        <input type="hidden" name="OrderDescription" value="Thanh toán qua Vnpay tại HieuTanStore" />
+                        <input type="hidden" name="OrderType" value="other" />
 
-                <input type="hidden" name="Phone" value="@Model.Phone" />
-                <input type="hidden" name="Address" value="@Model.Address" />
+                        <input type="hidden" name="Phone" value="@Model.Phone" />
+                        <input type="hidden" name="Address" value="@Model.Address" />
 
-                <button class="btn btn-success" type="submit">Thanh toán với VNPAY</button>
+                        <button class=" text-center site-btn" type="submit">Thanh toán với VNPAY</button>
+                        </div>
+              
+                </div>
             </form>
             
             

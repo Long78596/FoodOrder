@@ -22,6 +22,9 @@ namespace FoodOrder.Models.Order
         public int? ShipperId { get; set; }
         [ForeignKey("ShipperId")]
         public ShipperModel Shipper { get; set; }
+        public string? AppUserId { get; set; }
+        [ForeignKey("AppUserId")]
+        public AppUserModel appUserModel { get; set; }
 
 
 

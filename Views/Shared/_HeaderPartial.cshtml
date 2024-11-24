@@ -5,8 +5,8 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="header__top__left">
                         <ul>
-                            <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
-                            <li>Free Shipping for all Order of $99</li>
+                            <li><i class="fa fa-envelope"></i>Longkolp16@gmail.com</li>
+                            <li>Miễn phí vận chuyển 99.000VND</li>
                         </ul>
                     </div>
                 </div>
@@ -20,11 +20,11 @@
                         </div>
                         <div class="header__top__right__language">
                             <img src="~/Frontend/img/language.png" alt="">
-                            <div>English</div>
+                            <div>Việt Nam</div>
                             <span class="arrow_carrot-down"></span>
                             <ul>
-                                <li><a href="#">Spanis</a></li>
-                                <li><a href="#">English</a></li>
+                               
+                                <li><a href="#">Vietnamese</a></li>
                             </ul>
                         </div>
                         @* <div class="header__top__right__auth">
@@ -52,7 +52,7 @@
                         <li>
                             <a href="#">Thông tin</a>
                             <ul class="header__menu__dropdown">
-                                <li><a asp-action="Checkout" asp-controller="Cart">Thanh toán</a></li>
+                                <li><a asp-action="Index" asp-controller="Checkout">Thanh toán</a></li>
                                     <li><a asp-action="Index" asp-controller="Customer"> Thông tin cá nhân</a></li>
                                     <li><a asp-action="History" asp-controller="Account">Lịch sử đơn hàng</a></li>
                                 <li><a asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
@@ -73,12 +73,12 @@
                         <vc:cart></vc:cart>
                         <ul>
                             <li><a  style="color:black;font-weight:bold">
-                            <li><a asp-action="Logout" asp-controller="Account">Hi,@User.Identity.Name</a></li></a></li>
+                            <li><a asp-action="Logout" asp-controller="Account" style="color:black;font-weight:bold">Hi,@User.Identity.Name</a></li></a></li>
                         </ul>
                     }
                     else{
                         <ul>
-                            <li><a asp-action="Login" asp-controller="Account" style="color:black;font-weight:bold">Login</a></li>
+                            <li><a asp-action="Login" asp-controller="Account" style="color:black;font-weight:bold">Đăng nập</a></li>
                         </ul>
                        
                         

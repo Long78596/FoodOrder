@@ -1,11 +1,11 @@
 ﻿@{
     var currentUrl = Url.ActionContext.HttpContext.Request.Path;
 }
-<div class="col-lg-4 col-md-5">
+<div class="col-lg-4 col-md-5 text-center">
                             <div class="filter__sort">
-        <h5><span>Sắp xếp theo</span></h5>
-        <select class="form-control" id="sort_by" onchange="location = this.value;">
-            <option value="@currentUrl">----------</option>
+        <h2 class="text-center"><span>Sắp xếp theo</span></h2>
+        <select class="form-control text-center" id="sort_by" onchange="location = this.value;">
+            <option value="@currentUrl">-----Chọn sắp xếp-----</option>
             <option value="@currentUrl?sort_by=price_increase">Giá tăng dần</option>
             <option value="@currentUrl?sort_by=price_decrease">Giá giảm dần</option>
             <option value="@currentUrl?sort_by=price_newest">Mới nhất</option>

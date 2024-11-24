@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using FoodOrder.Areas.Admin.Repository;
 using FoodOrder.Data;
 using FoodOrder.Models;
 using FoodOrder.Models.ViewModels;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using NuGet.Packaging.Signing;
 
 namespace FoodOrder.Controllers
 {
@@ -18,10 +20,12 @@ namespace FoodOrder.Controllers
     {
         private readonly DataContext _dataContext;
         private readonly INotyfService _notyfService;
-        public CartController(DataContext context, INotyfService notyfService)
+        private readonly IEmailSendercs _emailSendercs;
+        public CartController(DataContext context, INotyfService notyfService,IEmailSendercs emailSendercs)
         {
             _dataContext = context;
             _notyfService = notyfService;
+            _emailSendercs = emailSendercs;
         }
         public IActionResult Index()
         {
@@ -46,33 +50,51 @@ namespace FoodOrder.Controllers
         }
         public async Task<IActionResult> AddToCart(int Id, int quantity = 1)
         {
+          
             FoodModel foods = await _dataContext.Foods.FindAsync(Id);
+
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
-            CartItemModel GiohangItems = cart.Where(c => c.FoodId == Id).FirstOrDefault();
-            if (quantity > foods.Quantity) 
+
+            if (quantity > foods.Quantity)
             {
                 _notyfService.Warning("Không thể thêm vào giỏ. Số lượng yêu cầu vượt quá số lượng đang có.");
                 return Redirect(Request.Headers["Referer"]);
             }
+
+            CartItemModel GiohangItems = cart.FirstOrDefault(c => c.FoodId == Id);
+
             if (GiohangItems == null)
             {
-                CartItemModel gioHangItem = new  CartItemModel(foods)
+                CartItemModel gioHangItem = new CartItemModel(foods)
                 {
-                    Quantity= quantity
+                    Quantity = quantity
                 };
-
-
                 cart.Add(gioHangItem);
-
             }
             else
             {
                 GiohangItems.Quantity += quantity;
             }
-            _notyfService.Success("thêm  thành công!");
+
             HttpContext.Session.SetJson("Cart", cart);
+
+            var customerEmail = User.Identity.Name; 
+
+            if (string.IsNullOrEmpty(customerEmail))
+            {
+                _notyfService.Warning("Không thể lấy email của khách hàng!");
+                return RedirectToAction("Index");
+            }
+
+            var subject = "Đơn hàng của bạn đã được cập nhật";
+            var message = $"Bạn vừa  thêm {quantity} {foods.Title} vào giỏ hàng của bạn. Tổng số lượng: {cart.Sum(c => c.Quantity)}.";
+
+            await _emailSendercs.SendEmailAsync(customerEmail, subject, message);
+
+            _notyfService.Success("Thêm sản phẩm vào giỏ hàng thành công!");
             return RedirectToAction("Index");
         }
+
         public async Task<IActionResult> UpdateCart(int Id, int quantity)
         {
             // Tìm sản phẩm trong cơ sở dữ liệu
@@ -104,6 +126,18 @@ namespace FoodOrder.Controllers
             {
                 _notyfService.Error("Sản phẩm không có trong giỏ hàng.");
             }
+            var customerEmail = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(customerEmail))
+            {
+                _notyfService.Warning("Không thể lấy email của khách hàng!");
+                return RedirectToAction("Index");
+            }
+
+            var subject = "Đơn hàng của bạn đã được cập nhật";
+            var message = $"Bạn vừa  thêm {quantity} {foodItem.Title} vào giỏ hàng của bạn. Tổng số lượng: {cart.Sum(c => c.Quantity)}.";
+
+            await _emailSendercs.SendEmailAsync(customerEmail, subject, message);
 
             return RedirectToAction("Index");
         }

@@ -207,7 +207,7 @@ namespace FoodOrder.Areas.Admin.Controllers
             await HttpContext.SignOutAsync();
             await _signInManager.SignOutAsync();
             _notyfService.Error("Đăng xuất thành công");
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Login", "Account", new { area = "" });
         }
 
     }

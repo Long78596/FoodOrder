@@ -18,7 +18,10 @@
                         <form asp-action="Shop" asp-controller="Home" method="get">
                             <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
                             <div id="slider-range"></div>
-                            <button type="submit" name="locgia" data-current_url="@currentUrl" class="btn btn-danger mt-2 btn_gia">lọc giá</button>
+                           <div class="text-center">
+                                <button type="submit" name="locgia" data-current_url="@currentUrl" class="btn btn-danger mt-2 btn_gia text-center">lọc giá</button>
+
+                           </div>
                         </form>
                     </div>
                    
@@ -40,14 +43,11 @@
                         @Html.Partial("_FilterFoodPartial")
                         <div class="col-lg-4 col-md-4">
                             <div class="filter__found">
-                                <h6><span>@Model.Count()</span> món ăn tất cả</h6>
+                                <h6><span>@Model.Count()</span><b  class="text-dark"> MÓN ĂN TẤT CẢ</b></h6>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-3">
-                            <div class="filter__option">
-                                <span class="icon_grid-2x2"></span>
-                                <span class="icon_ul"></span>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
