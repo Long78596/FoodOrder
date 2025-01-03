@@ -62,6 +62,13 @@ namespace FoodOrder.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
+                var checkussername = await _userManager.Users.FirstOrDefaultAsync(c => c.UserName == user.UserName);
+                if (checkussername !=null)
+                {
+                    _notyfService.Error("Tên tài khoản đã tồn tại!");
+                    return Redirect(Request.Headers["Referer"]);
+
+                }
                 var createUserResult = await _userManager.CreateAsync(user, user.PasswordHash);
                 if (createUserResult.Succeeded)
                 {
@@ -163,6 +170,13 @@ namespace FoodOrder.Areas.Admin.Controllers
 
             if (ModelState.IsValid)
             {
+                var checkussername = await _userManager.Users.FirstOrDefaultAsync(c => c.UserName == model.UserName);
+                if (checkussername != null)
+                {
+                    _notyfService.Error("Tên tài khoản đã tồn tại!");
+                    return Redirect(Request.Headers["Referer"]);
+
+                }
                 existing.UserName = model.UserName;
                 existing.Email = model.Email;
                 existing.PhoneNumber = model.PhoneNumber;

@@ -1,4 +1,4 @@
-﻿@model AppUserModel
+﻿@model FoodOrder.Models.ViewModels.ForgetPassViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +24,7 @@
         <form asp-action="SendMailForgetPass" asp-controller="Account" method="post">
             <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
                 <input asp-for="Email" type="text" class="passInput" placeholder="Nhập địa chỉ Email" style="padding: 10px; width: 100%; max-width: 300px; border: 1px solid #ccc; border-radius: 5px; outline: none;">
+                <span style="color:red" asp-validation-for="Email"></span>
                 <button type="submit" style="padding: 10px 20px; background-color: #00bfff; color: white; border: none; border-radius: 5px; cursor: pointer;">
                     Gửi
                 </button>

@@ -57,7 +57,7 @@ namespace FoodOrder.Controllers
 
             if (quantity > foods.Quantity)
             {
-                _notyfService.Warning("Không thể thêm vào giỏ. Số lượng yêu cầu vượt quá số lượng đang có.");
+                _notyfService.Warning("Đã hết hàng!");
                 return Redirect(Request.Headers["Referer"]);
             }
 
@@ -78,18 +78,7 @@ namespace FoodOrder.Controllers
 
             HttpContext.Session.SetJson("Cart", cart);
 
-            var customerEmail = User.Identity.Name; 
-
-            if (string.IsNullOrEmpty(customerEmail))
-            {
-                _notyfService.Warning("Không thể lấy email của khách hàng!");
-                return RedirectToAction("Index");
-            }
-
-            var subject = "Đơn hàng của bạn đã được cập nhật";
-            var message = $"Bạn vừa  thêm {quantity} {foods.Title} vào giỏ hàng của bạn. Tổng số lượng: {cart.Sum(c => c.Quantity)}.";
-
-            await _emailSendercs.SendEmailAsync(customerEmail, subject, message);
+           
 
             _notyfService.Success("Thêm sản phẩm vào giỏ hàng thành công!");
             return RedirectToAction("Index");
@@ -151,20 +140,20 @@ namespace FoodOrder.Controllers
             if (giohangVM.Quantity > 1)
             {
                 --giohangVM.Quantity;
+                _notyfService.Success("Giảm số lượng thành công!");
             }
-            else
-            {
-                cart.RemoveAll(c => c.FoodId == Id);
-            }
+           
             if (cart.Count == 0)
             {
                 HttpContext.Session.Remove("Cart");
+                _notyfService.Success("Giảm số lượng thành công!");
             }
             else
             {
                 HttpContext.Session.SetJson("Cart", cart);
+                _notyfService.Error("Không thể giảm số lượng, Khi   số lượng hiện tịa còn có  1!");
             }
-            _notyfService.Success("Giam số lượng thành công!");
+            //_notyfService.Success("Giảm số lượng thành công!");
             return RedirectToAction("Index");
 
         }

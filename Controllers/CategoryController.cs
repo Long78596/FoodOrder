@@ -30,13 +30,13 @@ namespace FoodOrder.Controllers
             IQueryable<FoodModel> productsByCategory = _dataContext.Foods
                 .Where(d => d.CategoryId == category.Id);
 
-            // Đếm tổng số sản phẩm theo category
+           
             var count = await productsByCategory.CountAsync();
 
-            // Nếu có sản phẩm
+           
             if (count > 0)
             {
-                // Sắp xếp sản phẩm theo giá trị sort_by
+             
                 if (sort_by == "price_increase")
                 {
                     productsByCategory = productsByCategory.OrderBy(d => d.Price);
@@ -67,13 +67,12 @@ namespace FoodOrder.Controllers
                 int totalItems = await productsByCategory.CountAsync();
                 int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-                // Gán giá trị cho ViewBag khi có sản phẩm
                 ViewBag.PageNumber = pg;
                 ViewBag.TotalPages = totalPages;
-                ViewBag.Slug = Slug ?? "";  // Gán giá trị mặc định cho Slug nếu null
-                ViewBag.SortBy = sort_by ?? "";  // Gán giá trị mặc định cho sort_by nếu null
-                ViewBag.StartPrice = startprice ?? "";  // Gán giá trị mặc định cho startprice nếu null
-                ViewBag.EndPrice = endprice ?? "";  // Gán giá trị mặc định cho endprice nếu null
+                ViewBag.Slug = Slug ?? "";  
+                ViewBag.SortBy = sort_by ?? "";  
+                ViewBag.StartPrice = startprice ?? ""; 
+                ViewBag.EndPrice = endprice ?? ""; 
 
                 productsByCategory = productsByCategory
                     .Skip((pg - 1) * pageSize)  

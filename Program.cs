@@ -2,6 +2,7 @@
 using FoodOrder.Areas.Admin.Repository;
 using FoodOrder.Data;
 using FoodOrder.Models;
+using FoodOrder.Repository.Validation;
 using FoodOrder.Services.VnPay;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -27,6 +28,7 @@ namespace FoodOrder
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectDB")));
 
             builder.Services.AddTransient<IEmailSendercs, EmailSender>();
+           builder.Services.AddTransient<EmailValidatorcs>();
 
             builder.Services.AddIdentity<AppUserModel, IdentityRole>()
            .AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
@@ -87,7 +89,7 @@ namespace FoodOrder
 
             builder.Services.AddAuthentication().AddFacebook(opt =>
  {
-     
+    
  });
 
 

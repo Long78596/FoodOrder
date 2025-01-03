@@ -75,7 +75,7 @@ namespace FoodOrder.Areas.Admin.Controllers
                     {
                         new_quantity += 1;
                         new_sold += orderDetail.Quantity_Sold;
-                        new_profit += Convert.ToInt32(orderDetail.Price - orderDetail.CapitalPrice);
+                        new_profit += Convert.ToInt32(orderDetail.Price + orderDetail.CapitalPrice)/2;
                         staticialModel = new Models.StatisticalModel
                         {
                            DateCreated=order.CreateDate,

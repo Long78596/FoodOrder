@@ -18,6 +18,7 @@
                 <div class="featured__controls">
                     
                 </div>
+
             </div>
         </div>
         <div class="row featured__filter">
@@ -27,10 +28,24 @@
                     <div class="featured__item">
                         <div class="featured__item__pic set-bg" data-setbg="/image/food/@item.Image">
                             <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                <li><a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id"><i class="fa fa-shopping-cart"></i></a></li>
-                            </ul>
+                              
+                                @if(item.Quantity >0){
+                                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                    <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                    <li><a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id"><i class="fa fa-shopping-cart"></i></a></li>
+                                }
+                                else{
+                                    <li>
+                                        <a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id" style="width:100px; background-color:antiquewhite;">
+                                            Hết hàng
+
+                                    </a>
+
+                                    </li>
+                                   
+                                
+                                    }
+                                </ul>
                         </div>
                         <div class="featured__item__text">
                             <h6><a asp-action="Detail" asp-controller="Home" asp-route-Id="@item.Id">@item.Title</a></h6>
@@ -52,7 +67,7 @@
             <div class="col-lg-6 col-md-6">
                 <div class="latest-product__text">
                     <h4>Món ăn mới nhất</h4>
-                    <div class="latest-product__slider owl-carousel">
+                    <div class="latest-product__slider ">
                        
                         <div class="latest-prdouct__slider__item">
                             @foreach (var food in ViewBag.foodnew)
@@ -63,7 +78,7 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>@food.Title</h6>
-                                        <span>@food.Price</span>
+                                        <span>@food.Price.ToString("##,###")</span>
                                     </div>
                                 </a>
                             }
@@ -75,7 +90,7 @@
             <div class="col-lg-6 col-md-6">
                 <div class="latest-product__text">
                     <h4>Top Món ăn mua nhiều nhất</h4>
-                    <div class="latest-product__slider owl-carousel">
+                    <div class="latest-product__slider ">
                         <div class="latest-prdouct__slider__item">
                             @foreach (var food in ViewBag.Topfood)
                             {
@@ -85,7 +100,7 @@
                                     </div>
                                     <div class="latest-product__item__text">
                                         <h6>@food.Title</h6>
-                                        <span>@food.Price</span>
+                                        <span>@food.Price.ToString("##,###")</span>
                                     </div>
                                 </a>
                             }

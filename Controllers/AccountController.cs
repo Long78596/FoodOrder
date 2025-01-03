@@ -12,6 +12,7 @@ using FoodOrder.Areas.Admin.Repository;
 using Microsoft.EntityFrameworkCore;
 using FoodOrder.Data;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using FoodOrder.Repository.Validation;
 
 namespace FoodOrder.Controllers
 {
@@ -23,13 +24,15 @@ namespace FoodOrder.Controllers
         private readonly INotyfService _notyfService;
         private readonly IEmailSendercs _emailSendercs;
         private readonly DataContext _dataContext;
-        public AccountController(UserManager<AppUserModel> userManager, SignInManager<AppUserModel> signInManager,INotyfService notyfService,IEmailSendercs emailSendercs,DataContext dataContext)
+        private readonly EmailValidatorcs _emailValidatorcs;
+        public AccountController(UserManager<AppUserModel> userManager, SignInManager<AppUserModel> signInManager,INotyfService notyfService,IEmailSendercs emailSendercs,DataContext dataContext,EmailValidatorcs emailValidatorcs)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _notyfService = notyfService;
             _emailSendercs = emailSendercs;
             _dataContext = dataContext;
+            _emailValidatorcs = emailValidatorcs;
 
         }
         [HttpGet]
@@ -43,6 +46,12 @@ namespace FoodOrder.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                if (!_emailValidatorcs.IsValidEmail(user.Email))
+                {
+                    _notyfService.Error("Email không đúng định dạng.");
+                    return PartialView(user);
+                }
                 if (user.Password.Length < 6 || !user.Password.Any(char.IsLetter) || !user.Password.Any(char.IsDigit))
                 {
                     _notyfService.Error( "Mật khẩu phải có ít nhất 6 ký tự và bao gồm cả chữ và số.");
@@ -99,6 +108,8 @@ namespace FoodOrder.Controllers
             {
                 try
                 {
+
+                   
                     // Kiểm tra nếu username tồn tại
                     var user = await _userManager.FindByNameAsync(loginVM.UserName);
                     if (user == null)
@@ -192,6 +203,8 @@ namespace FoodOrder.Controllers
 
         public async Task<IActionResult> NewPass(AppUserModel user, string token)
         {
+
+           
             var checkuser = await _userManager.Users.Where(u => u.Email == user.Email).Where(u => u.Token == user.Token).FirstOrDefaultAsync();
             if(checkuser != null)
             {
@@ -212,6 +225,11 @@ namespace FoodOrder.Controllers
         [HttpPost]
         public async Task<IActionResult> SendMailForgetPass(AppUserModel user)
         {
+            if (!_emailValidatorcs.IsValidEmail(user.Email))
+            {
+                _notyfService.Error("Email không đúng định dạng!");
+                return Redirect(Request.Headers["Referer"]);
+            }
             var checkMail = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == user.Email);
             if(checkMail == null)
             {
@@ -232,12 +250,17 @@ namespace FoodOrder.Controllers
                 await _emailSendercs.SendEmailAsync(recevier, subject, message);
 
             }
-            _notyfService.Success("An email has been sent to your registered email address with password reset instruction");
+            _notyfService.Success("Thông tin đã gửi qua gmail của bạn!");
             return RedirectToAction("ForgetPass", "Account");
         }
         [HttpPost]   
         public async Task<IActionResult> UpdateNewPass(AppUserModel user, string token)
         {
+            if (string.IsNullOrWhiteSpace(user.PasswordHash) || user.PasswordHash.Length < 6 || !user.PasswordHash.Any(char.IsLetter) || !user.PasswordHash.Any(char.IsDigit))
+            {
+                _notyfService.Error("Mật khẩu phải dài tối thiểu 6 ký tự và có cả ký tự số và chữ");
+                return Redirect(Request.Headers["Referer"]);
+            }
             var checkuser = await _userManager.Users.Where(u => u.Email == user.Email).Where(u => u.Token == user.Token).FirstOrDefaultAsync();
             if(checkuser != null)
             {
@@ -336,28 +359,56 @@ namespace FoodOrder.Controllers
             return View(orders);
         
         }
+
         public async Task<IActionResult> CancelOrder(string ordercode)
         {
-            if ((bool)!User.Identity?.IsAuthenticated)
+            if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account");
             }
+
             try
             {
-                var order = await _dataContext.Orders.Where(o => o.OrderCode == ordercode).FirstAsync();
-                order.Status = 3;
-                _dataContext.Update(order);
+                var order = await _dataContext.Orders.FirstOrDefaultAsync(o => o.OrderCode == ordercode);
+                if (order == null)
+                {
+                    _notyfService.Warning("Không tìm thấy đơn hàng cần hủy.");
+                    return RedirectToAction("History", "Account");
+                }
+
+                
+                var timeSinceOrder = DateTime.Now - order.CreateDate;
+                if (timeSinceOrder.TotalMinutes > 5)
+                {
+                    _notyfService.Warning("Bạn không thể hủy đơn hàng vì đã quá thời gian cho phép.");
+                    return RedirectToAction("History", "Account");
+                }
+
+               
+                if (order.Status != 1) 
+                {
+                    _notyfService.Warning("Đơn hàng không thể hủy do trạng thái hiện tại.");
+                    return RedirectToAction("History", "Account");
+                }
+
+                
+                order.Status = 3; 
+                _dataContext.Orders.Update(order);
                 await _dataContext.SaveChangesAsync();
 
-
-            }catch(Exception ex)
-            {
-                return BadRequest("An error occured while cancelling the order");
-
+                _notyfService.Success("Hủy đơn hàng thành công!");
+                return RedirectToAction("History", "Account");
             }
-            _notyfService.Error("hủy đơn hàng thành công!");
-            return RedirectToAction("History", "Account");
+            catch (Exception ex)
+            {
+             
+
+                _notyfService.Error("Đã xảy ra lỗi khi hủy đơn hàng. Vui lòng thử lại sau.");
+                return RedirectToAction("History", "Account");
+            }
         }
+
+
 
 
     }

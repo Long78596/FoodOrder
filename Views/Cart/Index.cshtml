@@ -90,12 +90,14 @@
                                         <td class="shoping__cart__quantity">
                                             <div class="quantity">
                                                 <div class="pro-qty">
+                                                    <a asp-action="Decrease" asp-controller="Cart" asp-route-Id="@item.FoodId"><span class="dec qtybtn">-</span></a>
                                                     <input type="text" Id="quantity" name="quantity" value="@item.Quantity">
+                                                    <a asp-action="Increase" asp-controller="Cart" asp-route-Id="@item.FoodId"><span class="inc qtybtn">+</span></a>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="shoping__cart__total">
-                                            @Model.CartItems.Where(x => x.FoodId == item.FoodId).Sum(x => x.Quantity * x.Price).ToString()
+                                                @Model.CartItems.Where(x => x.FoodId == item.FoodId).Sum(x => x.Quantity * x.Price).ToString("#,##0 VND")
                                         </td>
                                         <td class="shoping__cart__item__close">
                                             <a asp-action="Remove" asp-controller="Cart" asp-route-Id="@item.FoodId" class="btn btn-danger"><span class="icon_close"></span></a>
@@ -103,9 +105,9 @@
                                             
                                         
                                     </tr>
-                                    <tr  class="text-center">
-                                        <td colspan="8" class="shoping__cart__item__close">
-                                                <button type="submit" class="primary-btn ">
+                                    <tr class="text-center border-none">
+                                        <td colspan="8" class="shoping__cart__item__close border-none">
+                                            <button style="border:none;" type="submit" class="primary-btn  border-none">
                                                     <span class="icon_loading"></span> cập nhật
                                                 </button>
                                             </td>
@@ -127,6 +129,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
            
             <div class="col-lg-6">
@@ -143,80 +146,70 @@
                 </div>
                 <div class="row">
                     <div class="col-9">
-
-                        <div asp-validation-summary="ModelOnly" class="text-danger">
-                        </div>
-
-
-
-
                         <div class="form-group">
                             <label>Chọn Tỉnh thành phố</label>
                             <select class="form-control css_select" name="tinh" id="tinh" title="chọn Tỉnh thành">
                                 <option value="0">Tỉnh/Thành phố</option>
-
-
                             </select>
-
-
-
-
                         </div>
+
                         <div class="form-group">
-                            <label>Chọn Tỉnh thành phố</label>
+                            <label>Chọn Quận huyện</label>
                             <select class="form-control css_select" name="quan" id="quan" title="chọn quận huyện">
                                 <option value="0">Quận huyện</option>
-
-
                             </select>
-
-
-                            </span>
-
                         </div>
+
                         <div class="form-group">
-                            <label>Chọn Tỉnh thành phố</label>
+                            <label>Chọn Phường xã</label>
                             <select class="form-control css_select" name="phuong" id="phuong" title="chọn phường xã">
                                 <option value="0">Phường xã</option>
-
-
                             </select>
-
-
-                            </span>
-
                         </div>
 
-
-
-
                         <div class="form-group">
-                            <button type="button" class="btn btn-primary btn-add-shipping" type="submit">
-                                tính phí ship
+                            <button type="button" class="btn btn-primary btn-add-shipping" >
+                                Tính phí ship
                             </button>
                         </div>
                     </div>
                 </div>
+               
             </div>
-            <div class="col-lg-6">
-                <div class="shoping__checkout">
-                    <h5>Tổng:</h5>
-                    <ul>
-                        <li>Tổng tiền <span> @Model.GrandTotal.ToString("#,##0 VND")</span></li>
-                        <li>
-                        <li>Tổng tiền (đã bao gồm phí vận chuyển) <span>@((Model.CartItems.Sum(x => x.Quantity * x.Price) + Model.ShippingCost).ToString("#,##0 VND"))</span></li>
-                        </span></li>
-                        <li>Phí vận chuyển <span>@Model.ShippingCost.ToString("#,##0 VND")</span></li>
-                    </ul>
-                    <a asp-action="Index" asp-controller="Checkout" class="primary-btn">Thanh toán</a>
-                </div>
-            </div>
+          <div class="col-lg-6">
+    <div class="shoping__checkout">
+        <h5>Tổng:</h5>
+        <ul>
+            <li>
+                Tổng tiền (đã bao gồm phí vận chuyển)
+                <span>@((Model.CartItems.Sum(x => x.Quantity * x.Price) + (Model.ShippingCost > 0 ? Model.ShippingCost : 15000)).ToString("#,##0 VND"))</span>
+            </li>
+            <li>Tổng tiền <span>@Model.GrandTotal.ToString("#,##0 VND")</span></li>
+            <li>
+                Phí vận chuyển
+                <span>@(Model.ShippingCost > 0 ? Model.ShippingCost.ToString("#,##0 VND") : "15,000 VND")</span>
+            </li>
+        </ul>
+                    @if (Model.CartItems.Count > 0)
+                    {
+                        <a asp-action="Index" asp-controller="Checkout" class="primary-btn">Đặt hàng</a>
+                    }
+                    else
+                    {
+                        <a class="primary-btn disabled" style="pointer-events:none;">Đặt hàng</a>
+                    }
+
+    </div>
+</div>
+
+
         </div>
         
     </div>
 </section>
 
 @section Scripts {
+    
     <script>
         $(".btn-apply-coupon").click(function (event) {
             event.preventDefault(); // Prevent form submission
@@ -256,8 +249,8 @@
                     data: { tinh: tinh, quan: quan, phuong: phuong },
                     success: function (result) {
                         if (result.success) {
-                            // alert("Thêm vận chuyển thành công");
-                            location.load();
+                             alert("Thêm vận chuyển thành công");
+                            location.reload();
 
                         } else if (result.duplicate) {
                             alert("Có lỗi");
@@ -276,44 +269,68 @@
 
 
     </script>
-
     <script>
         $(document).ready(function () {
-            //Lấy tỉnh thành
-            $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-                if (data_tinh.error == 0) {
-                    $.each(data_tinh.data, function (key_tinh, val_tinh) {
-                        $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                    });
-                    $("#tinh").change(function (e) {
-                        var idtinh = $(this).val();
-                        //Lấy quận huyện
-                        $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                            if (data_quan.error == 0) {
-                                $("#quan").html('<option value="0">Quận Huyện</option>');
-                                $("#phuong").html('<option value="0">Phường Xã</option>');
-                                $.each(data_quan.data, function (key_quan, val_quan) {
-                                    $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                                });
-                                //Lấy phường xã
-                                $("#quan").change(function (e) {
-                                    var idquan = $(this).val();
-                                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                        if (data_phuong.error == 0) {
-                                            $("#phuong").html('<option value="0">Phường Xã</option>');
-                                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                            });
-                                        }
+            const apiBase = 'https://esgoo.net/api-tinhthanh';
+
+            // Hàm tải dữ liệu JSON
+            function loadData(url, successCallback, errorCallback) {
+                $.getJSON(url, function (response) {
+                    if (response.error === 0) {
+                        successCallback(response.data);
+                    } else {
+                        errorCallback && errorCallback(response.message);
+                    }
+                }).fail(function () {
+                    errorCallback && errorCallback("Không thể kết nối đến máy chủ.");
+                });
+            }
+
+            // Lấy danh sách tỉnh thành
+            loadData(`${apiBase}/1/0.htm`, function (dataTinh) {
+                $.each(dataTinh, function (key, val) {
+                    $("#tinh").append(`<option value="${val.id}">${val.full_name}</option>`);
+                });
+
+                // Khi người dùng chọn tỉnh
+                $("#tinh").change(function () {
+                    const idTinh = $(this).val();
+                    $("#quan").html('<option value="0">Quận huyện</option>');
+                    $("#phuong").html('<option value="0">Phường xã</option>');
+
+                    if (idTinh !== "0") {
+                        // Lấy danh sách quận huyện
+                        loadData(`${apiBase}/2/${idTinh}.htm`, function (dataQuan) {
+                            $.each(dataQuan, function (key, val) {
+                                $("#quan").append(`<option value="${val.id}">${val.full_name}</option>`);
+                            });
+
+                            // Khi người dùng chọn quận
+                            $("#quan").change(function () {
+                                const idQuan = $(this).val();
+                                $("#phuong").html('<option value="0">Phường xã</option>');
+
+                                if (idQuan !== "0") {
+                                    // Lấy danh sách phường xã
+                                    loadData(`${apiBase}/3/${idQuan}.htm`, function (dataPhuong) {
+                                        $.each(dataPhuong, function (key, val) {
+                                            $("#phuong").append(`<option value="${val.id}">${val.full_name}</option>`);
+                                        });
+                                    }, function (error) {
+                                        alert(error);
                                     });
-                                });
-
-                            }
+                                }
+                            });
+                        }, function (error) {
+                            alert(error);
                         });
-                    });
-
-                }
+                    }
+                });
+            }, function (error) {
+                alert(error);
             });
         });
     </script>
+
+ 
 }

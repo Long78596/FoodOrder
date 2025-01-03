@@ -34,35 +34,40 @@ namespace FoodOrder.Controllers
             _vnPayService = vnPayServices;
             _notyfService = notyfService;
         }
-        public async Task<IActionResult>Index() { 
+        public async Task<IActionResult> Index()
+        {
             List<CartItemModel> cart = HttpContext.Session.GetJson<List<CartItemModel>>("Cart") ?? new List<CartItemModel>();
+
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail == null)
             {
                 return RedirectToAction("Login", "Account");
             }
-            // Lấy thông tin người dùng từ Identity
+
             var user = await _userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            
             double totalPrice = cart.Sum(item => item.Quantity * item.Price);
 
-            //// Tạo model cho view
+            double shippingCost = 15000;
+
             var checkoutViewModel = new CheckoutViewModel
             {
                 CartItems = cart,
                 UserName = user.UserName,
                 Email = user.Email,
                 Phone = user.PhoneNumber,
-                TotalPrice = totalPrice
+                TotalPrice = totalPrice + shippingCost, 
+                Address = "", 
+                OrderNotes = ""
             };
 
             return View(checkoutViewModel);
         }
+
 
         public async Task<IActionResult> ConfirmPayment(CheckoutViewModel model, string PaymentMethod, string PaymentId)
         {

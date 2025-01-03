@@ -27,8 +27,8 @@ namespace FoodOrder.Controllers
         public IActionResult Index()
         {
             var foods = _dataContext.Foods.Include(d => d.Category).Skip(1).Take(8).ToList();
-            var foodnew = _dataContext.Foods.Where(x=>x.Status==true).Include(d => d.Category).Skip(8).Take(6).ToList();
-            var Topfood = _dataContext.Foods.Where(x=>x.Status==true).Include(d => d.Category).Skip(14).Take(6).ToList();
+            var foodnew = _dataContext.Foods.Where(x=>x.Status==true).Include(d => d.Category).Skip(8).Take(3).ToList();
+            var Topfood = _dataContext.Foods.Where(x=>x.Status==true).Include(d => d.Category).Skip(14).Take(3).ToList();
             ViewBag.foodnew = foodnew;
             ViewBag.Topfood = Topfood;
             return View(foods);
@@ -39,8 +39,8 @@ namespace FoodOrder.Controllers
             int pageSize = 6;  
             var productByCategory = await _dataContext.Foods.Include(d => d.Category).ToListAsync();
 
-           
-            if (productByCategory.Any())
+            var count =  productByCategory.Count();
+            if (count > 0)
             {
                 if (sort_by == "price_increase")
                 {
@@ -69,10 +69,7 @@ namespace FoodOrder.Controllers
                             .ToList();
                     }
                 }
-                else
-                {
-                    productByCategory = productByCategory.OrderByDescending(p => p.Id).ToList();
-                }
+               
             }
 
             // Pagination
@@ -93,14 +90,22 @@ namespace FoodOrder.Controllers
 
 
         
-        public async Task<IActionResult> Search(string searchtern)
+        public async Task<IActionResult> Search(string searchtern )
         {
             if (string.IsNullOrWhiteSpace(searchtern))
             {
                 _notyfService.Error("Vui lòng nhập từ khóa tìm kiếm! ");
                 return Redirect(Request.Headers["Referer"]);
             }
-            var products = await _dataContext.Foods.Where(p => p.Title.Contains(searchtern) || p.Description.Contains(searchtern)).ToListAsync();
+           
+                var products = await _dataContext.Foods.Include(c=>c.Category).Where(
+                    p => p.Title.Contains(searchtern) || p.Description.Contains(searchtern)
+                    ||
+                    p.Category.Title.Contains(searchtern) 
+
+
+
+                ).ToListAsync();
             ViewBag.Keyword = searchtern;
             return View(products);
         }

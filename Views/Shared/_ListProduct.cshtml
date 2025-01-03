@@ -29,7 +29,7 @@
                     <div class="sidebar__item">
                         <div class="latest-product__text">
                             <h4>Món ăn mói nhất</h4>
-                            <div class="latest-product__slider owl-carousel">
+                            <div class="latest-product__slider ">
 
                             <vc:topproduct></vc:topproduct>
                             </div>
@@ -58,9 +58,24 @@
                             <div class="product__item">
                                 <div class="product__item__pic set-bg" data-setbg="/image/food/@item.Image">
                                     <ul class="product__item__pic__hover">
-                                        <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                        <li><a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id"><i class="fa fa-shopping-cart"></i></a></li>
+                                        @if (item.Quantity > 0)
+                                        {
+                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                                            <li><a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id"><i class="fa fa-shopping-cart"></i></a></li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a asp-action="AddToCart" asp-controller="Cart" asp-route-Id="@item.Id" style="width:100px; background-color:antiquewhite;">
+                                                    Hết hàng
+
+                                                </a>
+
+                                            </li>
+
+
+                                        }
                                     </ul>
                                 </div>
                                 <div class="product__item__text">
@@ -72,14 +87,17 @@
                     }
 
                 </div>
-                <div class="product__discount">
+                <div class="">
                     <div class="section-title product__discount__title">
                         <h2>Giảm giá</h2>
                     </div>
                     <div class="row">
-                        <div class="product__discount__slider owl-carousel">
+                        <div class="product__discount__slider ">
 
-                            <vc:saleoff></vc:saleoff>
+                           <div class="row">
+                                <vc:saleoff></vc:saleoff>
+
+                           </div>
 
 
                         </div>

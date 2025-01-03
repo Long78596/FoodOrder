@@ -135,7 +135,7 @@
                         success: function (result) {
                             if (result.success) {
                                 alert("Thêm vận chuyển thành công");
-                                Location.load();
+                                location.reload();
 
                             } else if (result.duplicate) {
                                 alert("Có lỗi");
